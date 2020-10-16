@@ -7,10 +7,12 @@ namespace MedicinePlanner.Core.Repositories.Interfaces
 {
     public interface IFoodScheduleRepo
     {
-        FoodSchedule GetFoodScheduleById(string id);
-        FoodSchedule GetFoodScheduleByMedicineId(string medicineId);
-        FoodSchedule AddFoodSchedule(FoodSchedule foodSchedule);
-        FoodSchedule EditFoodSchedule(FoodSchedule foodSchedule);
-        FoodSchedule DeleteFoodSchedule(FoodSchedule foodSchedule);
+        FoodSchedule GetById(Guid id);
+        IEnumerable<FoodSchedule> GetAllByMedicineScheduleId(Guid medicineScheduleId);
+        FoodSchedule GetByDate(DateTime date);
+        FoodSchedule GetByMedicineScheduleId(Guid medicineScheduleId);
+        FoodSchedule Add(FoodSchedule foodSchedule);
+        FoodSchedule Edit(FoodSchedule foodSchedule);
+        FoodSchedule Delete(FoodSchedule foodSchedule);
     }
 }

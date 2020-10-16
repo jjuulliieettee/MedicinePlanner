@@ -1,16 +1,18 @@
 ﻿using MedicinePlanner.Data.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace MedicinePlanner.Core.Repositories.Interfaces
 {
     public interface IMedicineScheduleRepo
     {
-        MedicineSchedule GetMedicineScheduleById(string id);
-        MedicineSchedule GetMedicineScheduleByUserId(string userId);
-        MedicineSchedule AddMedicineSchedule(MedicineSchedule medicineSchedule);
-        MedicineSchedule EditMedicineSchedule(MedicineSchedule medicineSchedule);
-        MedicineSchedule DeleteMedicineSchedule(MedicineSchedule medicineSchedule);
+        MedicineSchedule GetById(Guid id);
+        MedicineSchedule GetByUserId(Guid userId);
+        IEnumerable<MedicineSchedule> GetAllByUserId(Guid userId);
+        MedicineSchedule GetByMedicineId(Guid medicineId);
+        MedicineSchedule GetByMedicineAndUserId(Guid medicineId, Guid userId);
+        MedicineSchedule Add(MedicineSchedule medicineSchedule);
+        MedicineSchedule Edit(MedicineSchedule medicineSchedule);
+        MedicineSchedule Delete(MedicineSchedule medicineSchedule);
     }
 }

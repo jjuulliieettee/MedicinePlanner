@@ -2,6 +2,7 @@
 using MedicinePlanner.Data;
 using MedicinePlanner.Data.Models;
 using System;
+using System.Collections.Generic;
 
 namespace MedicinePlanner.Core.Repositories
 {
@@ -13,27 +14,42 @@ namespace MedicinePlanner.Core.Repositories
             _context = context;
         }
 
-        public MedicineSchedule AddMedicineSchedule(MedicineSchedule medicineSchedule)
+        public MedicineSchedule Add(MedicineSchedule medicineSchedule)
         {
             throw new NotImplementedException();
         }
 
-        public MedicineSchedule DeleteMedicineSchedule(MedicineSchedule medicineSchedule)
+        public MedicineSchedule Delete(MedicineSchedule medicineSchedule)
         {
             throw new NotImplementedException();
         }
 
-        public MedicineSchedule EditMedicineSchedule(MedicineSchedule medicineSchedule)
+        public MedicineSchedule Edit(MedicineSchedule medicineSchedule)
         {
             throw new NotImplementedException();
         }
 
-        public MedicineSchedule GetMedicineScheduleById(string id)
+        public IEnumerable<MedicineSchedule> GetAllByUserId(Guid userId)
         {
             throw new NotImplementedException();
         }
 
-        public MedicineSchedule GetMedicineScheduleByUserId(string userId)
+        public MedicineSchedule GetById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MedicineSchedule GetByMedicineAndUserId(Guid medicineId, Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MedicineSchedule GetByMedicineId(Guid medicineId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MedicineSchedule GetByUserId(Guid userId)
         {
             throw new NotImplementedException();
         }

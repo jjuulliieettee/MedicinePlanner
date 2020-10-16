@@ -16,14 +16,14 @@ namespace MedicinePlanner.Core.Repositories
             _context = context;
         }
 
-        public FoodRelation AddFoodRelation(FoodRelation foodRelation)
+        public FoodRelation Add(FoodRelation foodRelation)
         {
             _context.FoodRelations.AddAsync(foodRelation);
             _context.SaveChangesAsync();
             return foodRelation;
         }
 
-        public FoodRelation EditFoodRelation(FoodRelation foodRelation)
+        public FoodRelation Edit(FoodRelation foodRelation)
         {
             _context.FoodRelations.Update(foodRelation);
             _context.SaveChangesAsync();
@@ -35,12 +35,12 @@ namespace MedicinePlanner.Core.Repositories
             return await _context.FoodRelations.ToListAsync();
         }
 
-        public async Task<FoodRelation> GetFoodRelationById(Guid id)
+        public async Task<FoodRelation> GetById(Guid id)
         {
             return await _context.FoodRelations.FirstOrDefaultAsync(fr => fr.Id == id);
         }
 
-        public async Task<FoodRelation> GetFoodRelationByName(string name)
+        public async Task<FoodRelation> GetByName(string name)
         {
             return await _context.FoodRelations.FirstOrDefaultAsync(fr => fr.Name == name);
         }

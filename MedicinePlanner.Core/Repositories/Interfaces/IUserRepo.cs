@@ -1,11 +1,12 @@
 ﻿using MedicinePlanner.Data.Models;
+using System;
 
 namespace MedicinePlanner.Core.Repositories.Interfaces
 {
     public interface IUserRepo
     {
-        User GetUserById(string id);
-        User GetUserByEmail(string email); 
-        User AddUser(User user);
+        User GetById(Guid id);
+        User GetByEmail(string email); 
+        User Add(User user);
     }
 }

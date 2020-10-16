@@ -13,17 +13,17 @@ namespace MedicinePlanner.Core.Repositories
             _context = context;
         }
 
-        public User AddUser(User user)
+        public User Add(User user)
         {
             throw new NotImplementedException();
         }
 
-        public User GetUserByEmail(string email)
+        public User GetByEmail(string email)
         {
             throw new NotImplementedException();
         }
 
-        public User GetUserById(string id)
+        public User GetById(Guid id)
         {
             throw new NotImplementedException();
         }

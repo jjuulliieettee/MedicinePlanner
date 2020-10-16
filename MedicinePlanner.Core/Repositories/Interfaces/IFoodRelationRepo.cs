@@ -8,9 +8,9 @@ namespace MedicinePlanner.Core.Repositories.Interfaces
     public interface IFoodRelationRepo
     {
         Task<IEnumerable<FoodRelation>> GetAll();
-        Task<FoodRelation> GetFoodRelationById(Guid id);
-        Task<FoodRelation> GetFoodRelationByName(string name);
-        FoodRelation AddFoodRelation(FoodRelation foodRelation);
-        FoodRelation EditFoodRelation(FoodRelation foodRelation);
+        Task<FoodRelation> GetById(Guid id);
+        Task<FoodRelation> GetByName(string name);
+        FoodRelation Add(FoodRelation foodRelation);
+        FoodRelation Edit(FoodRelation foodRelation);
     }
 }

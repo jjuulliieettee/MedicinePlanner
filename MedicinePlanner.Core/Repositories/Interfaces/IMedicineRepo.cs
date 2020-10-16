@@ -9,10 +9,10 @@ namespace MedicinePlanner.Core.Repositories.Interfaces
     {
         Task<IEnumerable<Medicine>> GetAll();
         Task<IEnumerable<Medicine>> GetAllByName(string name);
-        Task<Medicine> GetMedicineById(Guid id);
-        Task<Medicine> GetMedicineByName(string name);
-        Medicine AddMedicine(Medicine medicine);
-        Medicine EditMedicine(Medicine medicine);
+        Task<Medicine> GetById(Guid id);
+        Task<Medicine> GetByName(string name);
+        Medicine Add(Medicine medicine);
+        Medicine Edit(Medicine medicine);
 
     }
 }

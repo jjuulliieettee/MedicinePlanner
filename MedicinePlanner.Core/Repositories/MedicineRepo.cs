@@ -17,21 +17,21 @@ namespace MedicinePlanner.Core.Repositories
             _context = context;
         }
 
-        public Medicine AddMedicine(Medicine medicine)
+        public Medicine Add(Medicine medicine)
         {
             _context.Medicines.AddAsync(medicine);
             _context.SaveChangesAsync();
             return medicine;
         }
 
-        public Medicine EditMedicine(Medicine medicine)
+        public Medicine Edit(Medicine medicine)
         {
             _context.Medicines.Update(medicine);
             _context.SaveChangesAsync();
             return medicine;
         }
 
-        public async Task<Medicine> GetMedicineById(Guid id)
+        public async Task<Medicine> GetById(Guid id)
         {
             return await _context.Medicines.Include(fr => fr.FoodRelation).Include(pf => pf.PharmaceuticalForm)
                 .Include(ms => ms.MedicineSchedules).FirstOrDefaultAsync(med => med.Id == id);
@@ -43,7 +43,7 @@ namespace MedicinePlanner.Core.Repositories
                 .Include(ms => ms.MedicineSchedules).ToListAsync();
         }
 
-        public async Task<Medicine> GetMedicineByName(string name)
+        public async Task<Medicine> GetByName(string name)
         {
             return await _context.Medicines.Include(fr => fr.FoodRelation).Include(pf => pf.PharmaceuticalForm)
                 .Include(ms => ms.MedicineSchedules).FirstOrDefaultAsync(med => med.Name == name);

@@ -16,14 +16,14 @@ namespace MedicinePlanner.Core.Repositories
             _context = context;
         }
 
-        public PharmaceuticalForm AddPharmaceuticalForm(PharmaceuticalForm pharmaceuticalForm)
+        public PharmaceuticalForm Add(PharmaceuticalForm pharmaceuticalForm)
         {
             _context.PharmaceuticalForms.AddAsync(pharmaceuticalForm);
             _context.SaveChangesAsync();
             return pharmaceuticalForm;
         }
 
-        public PharmaceuticalForm EditPharmaceuticalForm(PharmaceuticalForm pharmaceuticalForm)
+        public PharmaceuticalForm Edit(PharmaceuticalForm pharmaceuticalForm)
         {
             _context.PharmaceuticalForms.Update(pharmaceuticalForm);
             _context.SaveChangesAsync();
@@ -35,12 +35,12 @@ namespace MedicinePlanner.Core.Repositories
             return await _context.PharmaceuticalForms.ToListAsync();
         }
 
-        public async Task<PharmaceuticalForm> GetPharmaceuticalFormById(Guid id)
+        public async Task<PharmaceuticalForm> GetById(Guid id)
         {
             return await _context.PharmaceuticalForms.FirstOrDefaultAsync(pf => pf.Id == id);
         }
 
-        public async Task<PharmaceuticalForm> GetPharmaceuticalFormByName(string name)
+        public async Task<PharmaceuticalForm> GetByName(string name)
         {
             return await _context.PharmaceuticalForms.FirstOrDefaultAsync(pf => pf.Name == name);
         }

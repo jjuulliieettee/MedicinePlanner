@@ -8,9 +8,9 @@ namespace MedicinePlanner.Core.Repositories.Interfaces
     public interface IPharmaceuticalForm
     {
         Task<IEnumerable<PharmaceuticalForm>> GetAll();
-        Task<PharmaceuticalForm> GetPharmaceuticalFormById(Guid id);
-        Task<PharmaceuticalForm> GetPharmaceuticalFormByName(string name);
-        PharmaceuticalForm AddPharmaceuticalForm(PharmaceuticalForm pharmaceuticalForm);
-        PharmaceuticalForm EditPharmaceuticalForm(PharmaceuticalForm pharmaceuticalForm);
+        Task<PharmaceuticalForm> GetById(Guid id);
+        Task<PharmaceuticalForm> GetByName(string name);
+        PharmaceuticalForm Add(PharmaceuticalForm pharmaceuticalForm);
+        PharmaceuticalForm Edit(PharmaceuticalForm pharmaceuticalForm);
     }
 }
