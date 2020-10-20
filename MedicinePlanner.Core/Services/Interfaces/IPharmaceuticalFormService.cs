@@ -3,14 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MedicinePlanner.Core.Repositories.Interfaces
+namespace MedicinePlanner.Core.Services.Interfaces
 {
-    public interface IPharmaceuticalForm
+    public interface IPharmaceuticalFormService
     {
         Task<IEnumerable<PharmaceuticalForm>> GetAll();
         Task<PharmaceuticalForm> GetById(Guid id);
         Task<PharmaceuticalForm> GetByName(string name);
-        PharmaceuticalForm Add(PharmaceuticalForm pharmaceuticalForm);
-        PharmaceuticalForm Edit(PharmaceuticalForm pharmaceuticalForm);
+        Task<PharmaceuticalForm> Add(PharmaceuticalForm pharmaceuticalForm);
+        Task<PharmaceuticalForm> Edit(PharmaceuticalForm pharmaceuticalForm);
+        Task Delete(Guid id);
     }
 }

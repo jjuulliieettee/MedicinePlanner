@@ -3,15 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MedicinePlanner.Core.Repositories.Interfaces
+namespace MedicinePlanner.Core.Services.Interfaces
 {
-    public interface IFoodRelationRepo
+    public interface IFoodRelationService
     {
         Task<IEnumerable<FoodRelation>> GetAll();
         Task<FoodRelation> GetById(Guid id);
         Task<FoodRelation> GetByName(string name);
-        FoodRelation Add(FoodRelation foodRelation);
-        FoodRelation Edit(FoodRelation foodRelation);
-        Task Delete(FoodRelation foodRelation);
+        Task<FoodRelation> Add(FoodRelation foodRelation);
+        Task<FoodRelation> Edit(FoodRelation foodRelation);
+        Task Delete(Guid id);
     }
 }

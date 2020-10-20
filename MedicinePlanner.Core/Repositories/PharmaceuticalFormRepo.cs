@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MedicinePlanner.Core.Repositories
 {
-    class PharmaceuticalFormRepo : IPharmaceuticalForm
+    public class PharmaceuticalFormRepo : IPharmaceuticalFormRepo
     {
         private readonly ApplicationContext _context;
         public PharmaceuticalFormRepo(ApplicationContext context)
@@ -21,6 +21,12 @@ namespace MedicinePlanner.Core.Repositories
             _context.PharmaceuticalForms.AddAsync(pharmaceuticalForm);
             _context.SaveChangesAsync();
             return pharmaceuticalForm;
+        }
+
+        public async Task Delete(PharmaceuticalForm pharmaceuticalForm)
+        {
+            _context.Remove(pharmaceuticalForm);
+            await _context.SaveChangesAsync();
         }
 
         public PharmaceuticalForm Edit(PharmaceuticalForm pharmaceuticalForm)
@@ -37,12 +43,12 @@ namespace MedicinePlanner.Core.Repositories
 
         public async Task<PharmaceuticalForm> GetById(Guid id)
         {
-            return await _context.PharmaceuticalForms.FirstOrDefaultAsync(pf => pf.Id == id);
+            return await _context.PharmaceuticalForms.AsNoTracking().FirstOrDefaultAsync(pf => pf.Id == id);
         }
 
         public async Task<PharmaceuticalForm> GetByName(string name)
         {
-            return await _context.PharmaceuticalForms.FirstOrDefaultAsync(pf => pf.Name == name);
+            return await _context.PharmaceuticalForms.AsNoTracking().FirstOrDefaultAsync(pf => pf.Name == name);
         }
     }
 }

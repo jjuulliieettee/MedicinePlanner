@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MedicinePlanner.Data.Models
@@ -10,6 +11,6 @@ namespace MedicinePlanner.Data.Models
         [Required]
         public string Name { get; set; }
 
-        public virtual Medicine Medicine { get; set; }
+        public virtual ICollection<Medicine> Medicine { get; set; }
     }
 }

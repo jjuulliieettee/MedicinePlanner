@@ -5,7 +5,7 @@ using System;
 
 namespace MedicinePlanner.Core.Repositories
 {
-    class UserRepo : IUserRepo
+    public class UserRepo : IUserRepo
     {
         private readonly ApplicationContext _context;
         public UserRepo(ApplicationContext context)

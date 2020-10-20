@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MedicinePlanner.Core.Repositories
 {
-    class FoodRelationRepo : IFoodRelationRepo
+    public class FoodRelationRepo : IFoodRelationRepo
     {
         private readonly ApplicationContext _context;
         public FoodRelationRepo(ApplicationContext context)
@@ -21,6 +21,12 @@ namespace MedicinePlanner.Core.Repositories
             _context.FoodRelations.AddAsync(foodRelation);
             _context.SaveChangesAsync();
             return foodRelation;
+        }
+
+        public async Task Delete(FoodRelation foodRelation)
+        {
+            _context.Remove(foodRelation);
+            await _context.SaveChangesAsync();
         }
 
         public FoodRelation Edit(FoodRelation foodRelation)
@@ -37,12 +43,12 @@ namespace MedicinePlanner.Core.Repositories
 
         public async Task<FoodRelation> GetById(Guid id)
         {
-            return await _context.FoodRelations.FirstOrDefaultAsync(fr => fr.Id == id);
+            return await _context.FoodRelations.AsNoTracking().FirstOrDefaultAsync(fr => fr.Id == id);
         }
 
         public async Task<FoodRelation> GetByName(string name)
         {
-            return await _context.FoodRelations.FirstOrDefaultAsync(fr => fr.Name == name);
+            return await _context.FoodRelations.AsNoTracking().FirstOrDefaultAsync(fr => fr.Name == name);
         }
     }
 }

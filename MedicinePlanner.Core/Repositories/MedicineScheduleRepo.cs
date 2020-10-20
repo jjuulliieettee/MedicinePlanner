@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace MedicinePlanner.Core.Repositories
 {
-    class MedicineScheduleRepo : IMedicineScheduleRepo
+    public class MedicineScheduleRepo : IMedicineScheduleRepo
     {
         private readonly ApplicationContext _context;
         public MedicineScheduleRepo(ApplicationContext context)

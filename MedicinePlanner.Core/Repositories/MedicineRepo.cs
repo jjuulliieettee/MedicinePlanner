@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MedicinePlanner.Core.Repositories
 {
-    class MedicineRepo : IMedicineRepo
+    public class MedicineRepo : IMedicineRepo
     {
         private readonly ApplicationContext _context;
         public MedicineRepo (ApplicationContext context)
@@ -34,7 +34,7 @@ namespace MedicinePlanner.Core.Repositories
         public async Task<Medicine> GetById(Guid id)
         {
             return await _context.Medicines.Include(fr => fr.FoodRelation).Include(pf => pf.PharmaceuticalForm)
-                .Include(ms => ms.MedicineSchedules).FirstOrDefaultAsync(med => med.Id == id);
+                .Include(ms => ms.MedicineSchedules).AsNoTracking().FirstOrDefaultAsync(med => med.Id == id);
         }
 
         public async Task<IEnumerable<Medicine>> GetAll()
@@ -46,7 +46,7 @@ namespace MedicinePlanner.Core.Repositories
         public async Task<Medicine> GetByName(string name)
         {
             return await _context.Medicines.Include(fr => fr.FoodRelation).Include(pf => pf.PharmaceuticalForm)
-                .Include(ms => ms.MedicineSchedules).FirstOrDefaultAsync(med => med.Name == name);
+                .Include(ms => ms.MedicineSchedules).AsNoTracking().FirstOrDefaultAsync(med => med.Name == name);
         }
 
         public async Task<IEnumerable<Medicine>> GetAllByName(string name)
