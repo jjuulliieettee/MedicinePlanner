@@ -2,12 +2,12 @@
 using System;
 using System.Threading.Tasks;
 
-namespace MedicinePlanner.Core.Repositories.Interfaces
+namespace MedicinePlanner.Core.Services.Interfaces
 {
-    public interface IUserRepo
+    public interface IUserService
     {
         Task<User> GetById(Guid id);
         Task<User> GetByEmail(string email);
-        User Add(User user);
+        Task<User> Add(User user);
     }
 }

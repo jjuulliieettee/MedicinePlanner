@@ -1,7 +1,9 @@
 ﻿using MedicinePlanner.Core.Repositories.Interfaces;
 using MedicinePlanner.Data;
 using MedicinePlanner.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading.Tasks;
 
 namespace MedicinePlanner.Core.Repositories
 {
@@ -15,17 +17,19 @@ namespace MedicinePlanner.Core.Repositories
 
         public User Add(User user)
         {
-            throw new NotImplementedException();
+            _context.Users.AddAsync(user);
+            _context.SaveChangesAsync();
+            return user;
         }
 
-        public User GetByEmail(string email)
+        public async Task<User> GetByEmail(string email)
         {
-            throw new NotImplementedException();
+            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Email == email);
         }
 
-        public User GetById(Guid id)
+        public async Task<User> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Id == id);
         }
     }
 }

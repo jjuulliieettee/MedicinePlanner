@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using AutoMapper;
 using System;
+using MedicinePlanner.WebApi.Configs;
 
 namespace MedicinePlanner.WebApi
 {
@@ -36,6 +37,14 @@ namespace MedicinePlanner.WebApi
                 s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
+            GoogleOptions googleOptions = Configuration.GetSection("Google").Get<GoogleOptions>();
+
+            services.AddAuthentication().AddGoogle(options =>
+             {
+                 options.ClientId = googleOptions.clientId;
+                 options.ClientSecret = googleOptions.clientSecret;
+             });
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<IMedicineRepo, MedicineRepo>();
@@ -55,6 +64,7 @@ namespace MedicinePlanner.WebApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
