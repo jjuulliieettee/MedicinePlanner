@@ -7,11 +7,13 @@ using MedicinePlanner.Core.Services.Interfaces;
 using MedicinePlanner.WebApi.Dtos;
 using AutoMapper;
 using MedicinePlanner.Core.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedicinePlanner.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MedicineController : ControllerBase
     {
         private readonly IMedicineService _medicineService;
