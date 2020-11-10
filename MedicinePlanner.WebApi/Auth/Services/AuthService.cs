@@ -44,7 +44,8 @@ namespace MedicinePlanner.WebApi.Auth.Services
         {
             List<Claim> claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email, user.Id)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+                    new Claim("UserId", user.Id),
                 };
             ClaimsIdentity claimsIdentity =
             new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,

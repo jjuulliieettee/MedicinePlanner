@@ -1,8 +1,11 @@
 ﻿using MedicinePlanner.Core.Repositories.Interfaces;
 using MedicinePlanner.Data;
 using MedicinePlanner.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MedicinePlanner.Core.Repositories
 {
@@ -14,44 +17,54 @@ namespace MedicinePlanner.Core.Repositories
             _context = context;
         }
 
-        public MedicineSchedule Add(MedicineSchedule medicineSchedule)
+        public async Task<IEnumerable<MedicineSchedule>> AddAsync(IEnumerable<MedicineSchedule> medicineSchedules)
         {
-            throw new NotImplementedException();
+            await _context.MedicineSchedules.AddRangeAsync(medicineSchedules);
+            await _context.SaveChangesAsync();
+            return medicineSchedules;
         }
 
-        public MedicineSchedule Delete(MedicineSchedule medicineSchedule)
+        public async Task DeleteAsync(MedicineSchedule medicineSchedule)
         {
-            throw new NotImplementedException();
+            _context.MedicineSchedules.Remove(medicineSchedule);
+            await _context.SaveChangesAsync();
         }
 
-        public MedicineSchedule Edit(MedicineSchedule medicineSchedule)
+        public async Task<MedicineSchedule> EditAsync(MedicineSchedule medicineSchedule)
         {
-            throw new NotImplementedException();
+            _context.MedicineSchedules.Update(medicineSchedule);
+            await _context.SaveChangesAsync();
+            return medicineSchedule;
         }
 
-        public IEnumerable<MedicineSchedule> GetAllByUserId(Guid userId)
+        public async Task<IEnumerable<MedicineSchedule>> GetAllByMedicineNameAndUserIdAsync(string medicineName, Guid userId)
         {
-            throw new NotImplementedException();
+            return await _context.MedicineSchedules.Include(med => med.Medicine).Include(fr => fr.Medicine.FoodRelation)
+                .Include(pf => pf.Medicine.PharmaceuticalForm).Include(user => user.User).Include(fs => fs.FoodSchedules)
+                .Where(ms => ms.UserId == userId).Where(ms => ms.Medicine.Name.Contains(medicineName))
+                .OrderByDescending(ms => ms.StartDate).ToListAsync();
         }
 
-        public MedicineSchedule GetById(Guid id)
+        public async Task<IEnumerable<MedicineSchedule>> GetAllByUserIdAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            return await _context.MedicineSchedules.Include(med => med.Medicine).Include(fr => fr.Medicine.FoodRelation)
+                .Include(pf => pf.Medicine.PharmaceuticalForm).Include(user => user.User)
+                .Include(fs => fs.FoodSchedules).Where(ms => ms.UserId == userId).OrderByDescending(ms => ms.StartDate).ToListAsync();
         }
 
-        public MedicineSchedule GetByMedicineAndUserId(Guid medicineId, Guid userId)
+        public async Task<IEnumerable<MedicineSchedule>> GetAllByUserIdAndMedicineIdAsync(Guid userId, Guid medicineId)
         {
-            throw new NotImplementedException();
+            return await _context.MedicineSchedules.Include(med => med.Medicine).Include(fr => fr.Medicine.FoodRelation)
+                .Include(pf => pf.Medicine.PharmaceuticalForm).Include(user => user.User).Include(fs => fs.FoodSchedules)
+                .Where(ms => ms.UserId == userId).Where(ms => ms.MedicineId == medicineId).OrderByDescending(ms => ms.StartDate).ToListAsync();
         }
 
-        public MedicineSchedule GetByMedicineId(Guid medicineId)
+        public async Task<MedicineSchedule> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
-        }
-
-        public MedicineSchedule GetByUserId(Guid userId)
-        {
-            throw new NotImplementedException();
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            return await _context.MedicineSchedules.AsNoTracking().Include(med => med.Medicine).Include(fr => fr.Medicine.FoodRelation)
+            .Include(pf => pf.Medicine.PharmaceuticalForm).Include(user => user.User)
+            .Include(fs => fs.FoodSchedules).FirstOrDefaultAsync(ms => ms.Id == id);
         }
     }
 }

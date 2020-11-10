@@ -16,37 +16,37 @@ namespace MedicinePlanner.Core.Repositories
             _context = context;
         }
 
-        public FoodRelation Add(FoodRelation foodRelation)
+        public async Task<FoodRelation> AddAsync(FoodRelation foodRelation)
         {
-            _context.FoodRelations.AddAsync(foodRelation);
-            _context.SaveChangesAsync();
+            await _context.FoodRelations.AddAsync(foodRelation);
+            await _context.SaveChangesAsync();
             return foodRelation;
         }
 
-        public async Task Delete(FoodRelation foodRelation)
+        public async Task DeleteAsync(FoodRelation foodRelation)
         {
             _context.Remove(foodRelation);
             await _context.SaveChangesAsync();
         }
 
-        public FoodRelation Edit(FoodRelation foodRelation)
+        public async Task<FoodRelation> EditAsync(FoodRelation foodRelation)
         {
             _context.FoodRelations.Update(foodRelation);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return foodRelation;
         }
 
-        public async Task<IEnumerable<FoodRelation>> GetAll()
+        public async Task<IEnumerable<FoodRelation>> GetAllAsync()
         {
             return await _context.FoodRelations.ToListAsync();
         }
 
-        public async Task<FoodRelation> GetById(Guid id)
+        public async Task<FoodRelation> GetByIdAsync(Guid id)
         {
             return await _context.FoodRelations.AsNoTracking().FirstOrDefaultAsync(fr => fr.Id == id);
         }
 
-        public async Task<FoodRelation> GetByName(string name)
+        public async Task<FoodRelation> GetByNameAsync(string name)
         {
             return await _context.FoodRelations.AsNoTracking().FirstOrDefaultAsync(fr => fr.Name == name);
         }

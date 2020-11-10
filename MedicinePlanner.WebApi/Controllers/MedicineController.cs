@@ -28,13 +28,23 @@ namespace MedicinePlanner.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MedicineReadDto>>> GetAll()
         {
-            return Ok(_mapper.Map<IEnumerable<MedicineReadDto>>(await _medicineService.GetAll()));
+            return Ok(_mapper.Map<IEnumerable<MedicineReadDto>>(await _medicineService.GetAllAsync()));
+        }
+
+        [HttpGet("Search")]
+        public async Task<ActionResult<IEnumerable<MedicineReadDto>>> Search([FromQuery]string name)
+        {
+            if(name == null)
+            {
+                return BadRequest();
+            }
+            return Ok(_mapper.Map<IEnumerable<MedicineReadDto>>(await _medicineService.GetAllByNameAsync(name)));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<MedicineReadDto>> Get(Guid id)
         {
-            MedicineReadDto medicine = _mapper.Map<MedicineReadDto>(await _medicineService.GetById(id));
+            MedicineReadDto medicine = _mapper.Map<MedicineReadDto>(await _medicineService.GetByIdAsync(id));
 
             if (medicine == null)
             {
@@ -58,7 +68,7 @@ namespace MedicinePlanner.WebApi.Controllers
             {
                 try
                 {
-                    MedicineReadDto newMedicine = _mapper.Map<MedicineReadDto>(await _medicineService.Add(_mapper.Map<Medicine>(medicine)));
+                    MedicineReadDto newMedicine = _mapper.Map<MedicineReadDto>(await _medicineService.AddAsync(_mapper.Map<Medicine>(medicine)));
                     return CreatedAtAction("Get", new { id = newMedicine.Id }, newMedicine);
                 }
                 catch(ApiException ex)

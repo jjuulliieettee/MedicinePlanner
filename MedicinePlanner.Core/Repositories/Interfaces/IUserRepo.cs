@@ -6,8 +6,8 @@ namespace MedicinePlanner.Core.Repositories.Interfaces
 {
     public interface IUserRepo
     {
-        Task<User> GetById(Guid id);
-        Task<User> GetByEmail(string email);
-        User Add(User user);
+        Task<User> GetByIdAsync(Guid id);
+        Task<User> GetByEmailAsync(string email);
+        Task<User> AddAsync(User user);
     }
 }

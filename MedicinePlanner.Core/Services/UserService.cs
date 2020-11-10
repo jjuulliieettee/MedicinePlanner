@@ -17,23 +17,23 @@ namespace MedicinePlanner.Core.Services
             _userRepo = userRepo;
         }
 
-        public async Task<User> Add(User user)
+        public async Task<User> AddAsync(User user)
         {
-            if (await _userRepo.GetByEmail(user.Email) != null)
+            if (await _userRepo.GetByEmailAsync(user.Email) != null)
             {
                 throw new ApiException("This user already exists!", 400);
             }
-            return _userRepo.Add(user);
+            return await _userRepo.AddAsync(user);
         }
 
-        public Task<User> GetById(Guid id)
+        public Task<User> GetByIdAsync(Guid id)
         {
-            return _userRepo.GetById(id);
+            return _userRepo.GetByIdAsync(id);
         }
 
-        public Task<User> GetByEmail(string email)
+        public Task<User> GetByEmailAsync(string email)
         {
-            return _userRepo.GetByEmail(email);
+            return _userRepo.GetByEmailAsync(email);
         }
     }
 }

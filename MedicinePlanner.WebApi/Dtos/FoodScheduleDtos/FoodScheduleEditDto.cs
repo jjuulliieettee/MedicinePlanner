@@ -1,13 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MedicinePlanner.Data.Models
+namespace MedicinePlanner.WebApi.Dtos
 {
-    public class FoodSchedule
+    public class FoodScheduleEditDto
     {
-        public Guid Id { get; set; }        
+        public Guid Id { get; set; }
 
-        [Required]
         public DateTimeOffset Date { get; set; }
 
         [Required]
@@ -17,8 +16,6 @@ namespace MedicinePlanner.Data.Models
         public int NumberOfMeals { get; set; }
 
         public Guid MedicineScheduleId { get; set; }
-
-        public virtual MedicineSchedule MedicineSchedule { get; set; }
 
     }
 }

@@ -15,19 +15,19 @@ namespace MedicinePlanner.Core.Repositories
             _context = context;
         }
 
-        public User Add(User user)
+        public async Task<User> AddAsync(User user)
         {
-            _context.Users.AddAsync(user);
-            _context.SaveChangesAsync();
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
             return user;
         }
 
-        public async Task<User> GetByEmail(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
             return await _context.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Email == email);
         }
 
-        public async Task<User> GetById(Guid id)
+        public async Task<User> GetByIdAsync(Guid id)
         {
             return await _context.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Id == id);
         }

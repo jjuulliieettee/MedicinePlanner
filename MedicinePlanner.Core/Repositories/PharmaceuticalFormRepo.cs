@@ -16,37 +16,37 @@ namespace MedicinePlanner.Core.Repositories
             _context = context;
         }
 
-        public PharmaceuticalForm Add(PharmaceuticalForm pharmaceuticalForm)
+        public async Task<PharmaceuticalForm> AddAsync(PharmaceuticalForm pharmaceuticalForm)
         {
-            _context.PharmaceuticalForms.AddAsync(pharmaceuticalForm);
-            _context.SaveChangesAsync();
+            await _context.PharmaceuticalForms.AddAsync(pharmaceuticalForm);
+            await _context.SaveChangesAsync();
             return pharmaceuticalForm;
         }
 
-        public async Task Delete(PharmaceuticalForm pharmaceuticalForm)
+        public async Task DeleteAsync(PharmaceuticalForm pharmaceuticalForm)
         {
             _context.Remove(pharmaceuticalForm);
             await _context.SaveChangesAsync();
         }
 
-        public PharmaceuticalForm Edit(PharmaceuticalForm pharmaceuticalForm)
+        public async Task<PharmaceuticalForm> EditAsync(PharmaceuticalForm pharmaceuticalForm)
         {
             _context.PharmaceuticalForms.Update(pharmaceuticalForm);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return pharmaceuticalForm;
         }
 
-        public async Task<IEnumerable<PharmaceuticalForm>> GetAll()
+        public async Task<IEnumerable<PharmaceuticalForm>> GetAllAsync()
         {
             return await _context.PharmaceuticalForms.ToListAsync();
         }
 
-        public async Task<PharmaceuticalForm> GetById(Guid id)
+        public async Task<PharmaceuticalForm> GetByIdAsync(Guid id)
         {
             return await _context.PharmaceuticalForms.AsNoTracking().FirstOrDefaultAsync(pf => pf.Id == id);
         }
 
-        public async Task<PharmaceuticalForm> GetByName(string name)
+        public async Task<PharmaceuticalForm> GetByNameAsync(string name)
         {
             return await _context.PharmaceuticalForms.AsNoTracking().FirstOrDefaultAsync(pf => pf.Name == name);
         }

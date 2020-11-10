@@ -7,11 +7,11 @@ namespace MedicinePlanner.Core.Services.Interfaces
 {
     public interface IFoodRelationService
     {
-        Task<IEnumerable<FoodRelation>> GetAll();
-        Task<FoodRelation> GetById(Guid id);
-        Task<FoodRelation> GetByName(string name);
-        Task<FoodRelation> Add(FoodRelation foodRelation);
-        Task<FoodRelation> Edit(FoodRelation foodRelation);
-        Task Delete(Guid id);
+        Task<IEnumerable<FoodRelation>> GetAllAsync();
+        Task<FoodRelation> GetByIdAsync(Guid id);
+        Task<FoodRelation> GetByNameAsync(string name);
+        Task<FoodRelation> AddAsync(FoodRelation foodRelation);
+        Task<FoodRelation> EditAsync(FoodRelation foodRelation);
+        Task DeleteAsync(Guid id);
     }
 }

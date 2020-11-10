@@ -7,11 +7,11 @@ namespace MedicinePlanner.Core.Services.Interfaces
 {
     public interface IMedicineService
     {
-        Task<IEnumerable<Medicine>> GetAll();
-        Task<IEnumerable<Medicine>> GetAllByName(string name);
-        Task<Medicine> GetById(Guid id);
-        Task<Medicine> GetByName(string name);
-        Task<Medicine> Add(Medicine medicine);
-        Task<Medicine> Edit(Medicine medicine);
+        Task<IEnumerable<Medicine>> GetAllAsync();
+        Task<IEnumerable<Medicine>> GetAllByNameAsync(string name);
+        Task<Medicine> GetByIdAsync(Guid id);
+        Task<Medicine> GetByNameAsync(string name);
+        Task<Medicine> AddAsync(Medicine medicine);
+        Task<Medicine> EditAsync(Medicine medicine);
     }
 }

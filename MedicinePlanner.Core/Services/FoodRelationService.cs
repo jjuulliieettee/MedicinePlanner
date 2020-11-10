@@ -16,18 +16,18 @@ namespace MedicinePlanner.Core.Services
             _foodRelationRepo = foodRelationRepo;
         }
 
-        public async Task<FoodRelation> Add(FoodRelation foodRelation)
+        public async Task<FoodRelation> AddAsync(FoodRelation foodRelation)
         {
-            if (await _foodRelationRepo.GetByName(foodRelation.Name) != null)
+            if (await _foodRelationRepo.GetByNameAsync(foodRelation.Name) != null)
             {
                 throw new ApiException("This food relation already exists!", 400);
             }
-            return _foodRelationRepo.Add(foodRelation);
+            return await _foodRelationRepo.AddAsync(foodRelation);
         }
 
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            FoodRelation foodRelation = await _foodRelationRepo.GetById(id);
+            FoodRelation foodRelation = await _foodRelationRepo.GetByIdAsync(id);
 
             if (foodRelation == null)
             {
@@ -38,12 +38,12 @@ namespace MedicinePlanner.Core.Services
             {
                 throw new ApiException("This food relation cannot be deleted!", 400);
             }
-            await _foodRelationRepo.Delete(foodRelation);
+            await _foodRelationRepo.DeleteAsync(foodRelation);
         }
 
-        public async Task<FoodRelation> Edit(FoodRelation foodRelation)
+        public async Task<FoodRelation> EditAsync(FoodRelation foodRelation)
         {
-            FoodRelation foodRelationOld = await _foodRelationRepo.GetById(foodRelation.Id);
+            FoodRelation foodRelationOld = await _foodRelationRepo.GetByIdAsync(foodRelation.Id);
             if (foodRelationOld == null)
             {
                 throw new ApiException("Food relation not found!");
@@ -54,28 +54,28 @@ namespace MedicinePlanner.Core.Services
                 throw new ApiException("This food relation cannot be modified!", 400);
             }
 
-            FoodRelation foodRelationInDb = await _foodRelationRepo.GetByName(foodRelation.Name);
+            FoodRelation foodRelationInDb = await _foodRelationRepo.GetByNameAsync(foodRelation.Name);
             if (foodRelationInDb != null && foodRelationInDb.Id != foodRelation.Id)
             {
                 throw new ApiException("This food relation already exists!", 400);
             }
 
-            return _foodRelationRepo.Edit(foodRelation);
+            return await _foodRelationRepo.EditAsync(foodRelation);
         }
 
-        public Task<IEnumerable<FoodRelation>> GetAll()
+        public Task<IEnumerable<FoodRelation>> GetAllAsync()
         {
-            return _foodRelationRepo.GetAll();
+            return _foodRelationRepo.GetAllAsync();
         }
 
-        public Task<FoodRelation> GetById(Guid id)
+        public Task<FoodRelation> GetByIdAsync(Guid id)
         {
-            return _foodRelationRepo.GetById(id);
+            return _foodRelationRepo.GetByIdAsync(id);
         }
 
-        public Task<FoodRelation> GetByName(string name)
+        public Task<FoodRelation> GetByNameAsync(string name)
         {
-            return _foodRelationRepo.GetByName(name);
+            return _foodRelationRepo.GetByNameAsync(name);
         }
     }
 }

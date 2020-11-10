@@ -17,42 +17,42 @@ namespace MedicinePlanner.Core.Repositories
             _context = context;
         }
 
-        public Medicine Add(Medicine medicine)
+        public async Task<Medicine> AddAsync(Medicine medicine)
         {
-            _context.Medicines.AddAsync(medicine);
-            _context.SaveChangesAsync();
+            await _context.Medicines.AddAsync(medicine);
+            await _context.SaveChangesAsync();
             return medicine;
         }
 
-        public Medicine Edit(Medicine medicine)
+        public async Task<Medicine> EditAsync(Medicine medicine)
         {
             _context.Medicines.Update(medicine);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return medicine;
         }
 
-        public async Task<Medicine> GetById(Guid id)
+        public async Task<Medicine> GetByIdAsync(Guid id)
         {
             return await _context.Medicines.Include(fr => fr.FoodRelation).Include(pf => pf.PharmaceuticalForm)
                 .Include(ms => ms.MedicineSchedules).AsNoTracking().FirstOrDefaultAsync(med => med.Id == id);
         }
 
-        public async Task<IEnumerable<Medicine>> GetAll()
+        public async Task<IEnumerable<Medicine>> GetAllAsync()
         {
             return await _context.Medicines.Include(fr => fr.FoodRelation).Include(pf => pf.PharmaceuticalForm)
                 .Include(ms => ms.MedicineSchedules).ToListAsync();
         }
 
-        public async Task<Medicine> GetByName(string name)
+        public async Task<Medicine> GetByNameAsync(string name)
         {
             return await _context.Medicines.Include(fr => fr.FoodRelation).Include(pf => pf.PharmaceuticalForm)
                 .Include(ms => ms.MedicineSchedules).AsNoTracking().FirstOrDefaultAsync(med => med.Name == name);
         }
 
-        public async Task<IEnumerable<Medicine>> GetAllByName(string name)
+        public async Task<IEnumerable<Medicine>> GetAllByNameAsync(string name)
         {
             return await _context.Medicines.Include(fr => fr.FoodRelation).Include(pf => pf.PharmaceuticalForm)
-                .Include(ms => ms.MedicineSchedules).Where(med => med.Name == name).ToListAsync();
+                .Include(ms => ms.MedicineSchedules).Where(med => med.Name.Contains(name)).ToListAsync();
         }
     }
 }

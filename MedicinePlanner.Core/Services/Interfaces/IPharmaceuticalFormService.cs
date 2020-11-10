@@ -7,11 +7,11 @@ namespace MedicinePlanner.Core.Services.Interfaces
 {
     public interface IPharmaceuticalFormService
     {
-        Task<IEnumerable<PharmaceuticalForm>> GetAll();
-        Task<PharmaceuticalForm> GetById(Guid id);
-        Task<PharmaceuticalForm> GetByName(string name);
-        Task<PharmaceuticalForm> Add(PharmaceuticalForm pharmaceuticalForm);
-        Task<PharmaceuticalForm> Edit(PharmaceuticalForm pharmaceuticalForm);
-        Task Delete(Guid id);
+        Task<IEnumerable<PharmaceuticalForm>> GetAllAsync();
+        Task<PharmaceuticalForm> GetByIdAsync(Guid id);
+        Task<PharmaceuticalForm> GetByNameAsync(string name);
+        Task<PharmaceuticalForm> AddAsync(PharmaceuticalForm pharmaceuticalForm);
+        Task<PharmaceuticalForm> EditAsync(PharmaceuticalForm pharmaceuticalForm);
+        Task DeleteAsync(Guid id);
     }
 }

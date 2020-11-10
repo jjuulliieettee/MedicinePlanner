@@ -48,14 +48,14 @@ namespace MedicinePlanner.WebApi.Controllers
                     Audience = new[] { _options.Value.clientId }
                 });
 
-                UserReadDto userReadDto = _mapper.Map<UserReadDto>(await _userService.GetByEmail(payload.Email));
+                UserReadDto userReadDto = _mapper.Map<UserReadDto>(await _userService.GetByEmailAsync(payload.Email));
                 if(userReadDto != null)
                 {
                     return Ok(_authService.Login(userReadDto));
                 }
                 UserCreateDto userToCreate = new UserCreateDto { Email = payload.Email };
 
-                User newUser = await _userService.Add(_mapper.Map<User>(userToCreate));
+                User newUser = await _userService.AddAsync(_mapper.Map<User>(userToCreate));
                 UserReadDto newUserDto = _mapper.Map<UserReadDto>(newUser);
 
                 return Ok(_authService.Login(newUserDto));

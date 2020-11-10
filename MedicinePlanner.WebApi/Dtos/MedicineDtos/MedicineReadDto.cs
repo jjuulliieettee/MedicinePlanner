@@ -30,7 +30,5 @@ namespace MedicinePlanner.WebApi.Dtos
         public string PharmaceuticalFormName { get; set; }
 
         public string FoodRelationName { get; set; }
-
-        //public ICollection<MedicineSchedule> MedicineSchedules { get; set; }
     }
 }

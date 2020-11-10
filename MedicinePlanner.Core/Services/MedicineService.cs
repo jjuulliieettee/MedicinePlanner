@@ -17,46 +17,46 @@ namespace MedicinePlanner.Core.Services
             _medicineRepository = medicineRepository;
         }
 
-        public async Task<Medicine> Add(Medicine medicine)
+        public async Task<Medicine> AddAsync(Medicine medicine)
         {
-            IEnumerable<Medicine> medicines = (await _medicineRepository.GetAllByName(medicine.Name))
+            IEnumerable<Medicine> medicines = (await _medicineRepository.GetAllByNameAsync(medicine.Name))
                 .Where(med => IsMedicineEqual(medicine, med));
             
             if (medicines.Any())
             {
                 throw new ApiException("Medicine with such parameters already exists!", 400);
             }
-            return _medicineRepository.Add(medicine);
+            return await _medicineRepository.AddAsync(medicine);
         }
 
-        public async Task<Medicine> Edit(Medicine medicine)
+        public async Task<Medicine> EditAsync(Medicine medicine)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Medicine>> GetAll()
+        public Task<IEnumerable<Medicine>> GetAllAsync()
         {
-            return _medicineRepository.GetAll();
+            return _medicineRepository.GetAllAsync();
         }
 
-        public Task<IEnumerable<Medicine>> GetAllByName(string name)
+        public Task<IEnumerable<Medicine>> GetAllByNameAsync(string name)
         {
-            return _medicineRepository.GetAllByName(name);
+            return _medicineRepository.GetAllByNameAsync(name);
         }
 
-        public Task<Medicine> GetById(Guid id)
+        public Task<Medicine> GetByIdAsync(Guid id)
         {
-            return _medicineRepository.GetById(id);
+            return _medicineRepository.GetByIdAsync(id);
         }
 
-        public Task<Medicine> GetByName(string name)
+        public Task<Medicine> GetByNameAsync(string name)
         {
-            return _medicineRepository.GetByName(name);
+            return _medicineRepository.GetByNameAsync(name);
         }
 
         private bool IsMedicineEqual(Medicine med1, Medicine med2)
         {
-            return med1.Name == med2.Name
+            return med1.Name.ToLower() == med2.Name.ToLower()
                 && med1.PharmaceuticalFormId == med2.PharmaceuticalFormId
                 && med1.Dosage == med2.Dosage
                 && med1.NumberOfTakes == med2.NumberOfTakes;

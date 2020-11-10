@@ -26,13 +26,13 @@ namespace MedicinePlanner.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PharmaceuticalFormDto>>> GetAll()
         {
-            return Ok(_mapper.Map<IEnumerable<PharmaceuticalFormDto>>(await _pharmaceuticalFormService.GetAll()));
+            return Ok(_mapper.Map<IEnumerable<PharmaceuticalFormDto>>(await _pharmaceuticalFormService.GetAllAsync()));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<PharmaceuticalFormDto>> Get(Guid id)
         {
-            PharmaceuticalFormDto pharmaceuticalForm = _mapper.Map<PharmaceuticalFormDto>(await _pharmaceuticalFormService.GetById(id));
+            PharmaceuticalFormDto pharmaceuticalForm = _mapper.Map<PharmaceuticalFormDto>(await _pharmaceuticalFormService.GetByIdAsync(id));
 
             if (pharmaceuticalForm == null)
             {
@@ -49,7 +49,7 @@ namespace MedicinePlanner.WebApi.Controllers
             try
             {
                 return Ok(_mapper.Map<PharmaceuticalFormDto>(
-                    await _pharmaceuticalFormService.Edit(_mapper.Map<PharmaceuticalForm>(pharmaceuticalForm))
+                    await _pharmaceuticalFormService.EditAsync(_mapper.Map<PharmaceuticalForm>(pharmaceuticalForm))
                     ));
             }
             catch (ApiException ex)
@@ -66,7 +66,7 @@ namespace MedicinePlanner.WebApi.Controllers
                 try
                 {
                     PharmaceuticalFormDto newPharmaceuticalForm = _mapper.Map<PharmaceuticalFormDto>(
-                        await _pharmaceuticalFormService.Add(_mapper.Map<PharmaceuticalForm>(pharmaceuticalForm))
+                        await _pharmaceuticalFormService.AddAsync(_mapper.Map<PharmaceuticalForm>(pharmaceuticalForm))
                         );
                     return CreatedAtAction("Get", new { id = newPharmaceuticalForm.Id }, newPharmaceuticalForm);
                 }
@@ -83,7 +83,7 @@ namespace MedicinePlanner.WebApi.Controllers
         {
             try
             {
-                await _pharmaceuticalFormService.Delete(id);
+                await _pharmaceuticalFormService.DeleteAsync(id);
                 return NoContent();
             }
             catch (ApiException ex)

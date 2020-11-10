@@ -16,18 +16,18 @@ namespace MedicinePlanner.Core.Services
             _pharmaceuticalFormRepo = pharmaceuticalFormRepo;
         }
 
-        public async Task<PharmaceuticalForm> Add(PharmaceuticalForm pharmaceuticalForm)
+        public async Task<PharmaceuticalForm> AddAsync(PharmaceuticalForm pharmaceuticalForm)
         {
-            if (await _pharmaceuticalFormRepo.GetByName(pharmaceuticalForm.Name) != null)
+            if (await _pharmaceuticalFormRepo.GetByNameAsync(pharmaceuticalForm.Name) != null)
             {
                 throw new ApiException("This pharmaceutical form already exists!", 400);
             }
-            return _pharmaceuticalFormRepo.Add(pharmaceuticalForm);
+            return await _pharmaceuticalFormRepo.AddAsync(pharmaceuticalForm);
         }
 
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            PharmaceuticalForm pharmaceuticalForm = await _pharmaceuticalFormRepo.GetById(id);
+            PharmaceuticalForm pharmaceuticalForm = await _pharmaceuticalFormRepo.GetByIdAsync(id);
             
             if (pharmaceuticalForm == null)
             {
@@ -38,12 +38,12 @@ namespace MedicinePlanner.Core.Services
             {
                 throw new ApiException("This pharmaceutical form cannot be deleted!", 400);
             }
-            await _pharmaceuticalFormRepo.Delete(pharmaceuticalForm);
+            await _pharmaceuticalFormRepo.DeleteAsync(pharmaceuticalForm);
         }
 
-        public async Task<PharmaceuticalForm> Edit(PharmaceuticalForm pharmaceuticalForm)
+        public async Task<PharmaceuticalForm> EditAsync(PharmaceuticalForm pharmaceuticalForm)
         {
-            PharmaceuticalForm pharmaceuticalFormOld = await _pharmaceuticalFormRepo.GetById(pharmaceuticalForm.Id);
+            PharmaceuticalForm pharmaceuticalFormOld = await _pharmaceuticalFormRepo.GetByIdAsync(pharmaceuticalForm.Id);
             if (pharmaceuticalFormOld == null)
             {
                 throw new ApiException("Pharmaceutical form not found!");
@@ -54,28 +54,28 @@ namespace MedicinePlanner.Core.Services
                 throw new ApiException("This pharmaceutical form cannot be modified!", 400);
             }
 
-            PharmaceuticalForm pharmaceuticalFormInDb = await _pharmaceuticalFormRepo.GetByName(pharmaceuticalForm.Name);
+            PharmaceuticalForm pharmaceuticalFormInDb = await _pharmaceuticalFormRepo.GetByNameAsync(pharmaceuticalForm.Name);
             if (pharmaceuticalFormInDb != null && pharmaceuticalFormInDb.Id != pharmaceuticalForm.Id)
             {
                 throw new ApiException("This pharmaceutical form already exists!", 400);
             }
 
-            return _pharmaceuticalFormRepo.Edit(pharmaceuticalForm);
+            return await _pharmaceuticalFormRepo.EditAsync(pharmaceuticalForm);
         }
 
-        public Task<IEnumerable<PharmaceuticalForm>> GetAll()
+        public Task<IEnumerable<PharmaceuticalForm>> GetAllAsync()
         {
-            return _pharmaceuticalFormRepo.GetAll();
+            return _pharmaceuticalFormRepo.GetAllAsync();
         }
 
-        public Task<PharmaceuticalForm> GetById(Guid id)
+        public Task<PharmaceuticalForm> GetByIdAsync(Guid id)
         {
-            return _pharmaceuticalFormRepo.GetById(id);
+            return _pharmaceuticalFormRepo.GetByIdAsync(id);
         }
 
-        public Task<PharmaceuticalForm> GetByName(string name)
+        public Task<PharmaceuticalForm> GetByNameAsync(string name)
         {
-            return _pharmaceuticalFormRepo.GetByName(name);
+            return _pharmaceuticalFormRepo.GetByNameAsync(name);
         }
     }
 }

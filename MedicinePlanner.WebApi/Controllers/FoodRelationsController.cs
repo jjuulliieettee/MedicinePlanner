@@ -28,13 +28,13 @@ namespace MedicinePlanner.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FoodRelationDto>>> GetAll()
         {
-            return Ok(_mapper.Map<IEnumerable<FoodRelationDto>>(await _foodRelationService.GetAll()));
+            return Ok(_mapper.Map<IEnumerable<FoodRelationDto>>(await _foodRelationService.GetAllAsync()));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<FoodRelationDto>> Get(Guid id)
         {
-            FoodRelationDto foodRelation = _mapper.Map<FoodRelationDto>(await _foodRelationService.GetById(id));
+            FoodRelationDto foodRelation = _mapper.Map<FoodRelationDto>(await _foodRelationService.GetByIdAsync(id));
 
             if (foodRelation == null)
             {
@@ -50,7 +50,7 @@ namespace MedicinePlanner.WebApi.Controllers
             foodRelation.Id = id;
             try
             {
-                return Ok(_mapper.Map<FoodRelationDto>(await _foodRelationService.Edit(_mapper.Map<FoodRelation>(foodRelation))));
+                return Ok(_mapper.Map<FoodRelationDto>(await _foodRelationService.EditAsync(_mapper.Map<FoodRelation>(foodRelation))));
             }
             catch (ApiException ex)
             {
@@ -66,7 +66,7 @@ namespace MedicinePlanner.WebApi.Controllers
                 try
                 {
                     FoodRelationDto newFoodRelation = _mapper.Map<FoodRelationDto>(
-                        await _foodRelationService.Add(_mapper.Map<FoodRelation>(foodRelation))
+                        await _foodRelationService.AddAsync(_mapper.Map<FoodRelation>(foodRelation))
                         );
                     return CreatedAtAction("Get", new { id = newFoodRelation.Id }, newFoodRelation);
                 }
@@ -83,7 +83,7 @@ namespace MedicinePlanner.WebApi.Controllers
         {
             try
             {
-                await _foodRelationService.Delete(id);
+                await _foodRelationService.DeleteAsync(id);
                 return NoContent();
             }
             catch (ApiException ex)

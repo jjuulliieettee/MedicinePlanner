@@ -13,9 +13,7 @@ using Newtonsoft.Json.Serialization;
 using AutoMapper;
 using System;
 using System.Linq;
-using Microsoft.AspNetCore.Authentication.Google;
 using MedicinePlanner.WebApi.Configs;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using MedicinePlanner.WebApi.Auth.Services.Interfaces;
 using MedicinePlanner.WebApi.Auth.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -40,7 +38,8 @@ namespace MedicinePlanner.WebApi
                  options.UseSqlServer
                  (
                     Configuration.GetConnectionString("DefaultConnection")
-                 ));
+                 ).EnableSensitiveDataLogging()
+                 );
 
             services.AddCors(options =>
             {
@@ -107,6 +106,10 @@ namespace MedicinePlanner.WebApi
             services.AddScoped<IPharmaceuticalFormService, PharmaceuticalFormService>();
             services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IMedicineScheduleRepo, MedicineScheduleRepo>();
+            services.AddScoped<IMedicineScheduleService, MedicineScheduleService>();
+            services.AddScoped<IFoodScheduleRepo, FoodScheduleRepo>();
+            services.AddScoped<IFoodScheduleService, FoodScheduleService>();
 
         }
 

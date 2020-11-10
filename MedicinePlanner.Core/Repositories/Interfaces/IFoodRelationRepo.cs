@@ -7,11 +7,11 @@ namespace MedicinePlanner.Core.Repositories.Interfaces
 {
     public interface IFoodRelationRepo
     {
-        Task<IEnumerable<FoodRelation>> GetAll();
-        Task<FoodRelation> GetById(Guid id);
-        Task<FoodRelation> GetByName(string name);
-        FoodRelation Add(FoodRelation foodRelation);
-        FoodRelation Edit(FoodRelation foodRelation);
-        Task Delete(FoodRelation foodRelation);
+        Task<IEnumerable<FoodRelation>> GetAllAsync();
+        Task<FoodRelation> GetByIdAsync(Guid id);
+        Task<FoodRelation> GetByNameAsync(string name);
+        Task<FoodRelation> AddAsync(FoodRelation foodRelation);
+        Task<FoodRelation> EditAsync(FoodRelation foodRelation);
+        Task DeleteAsync(FoodRelation foodRelation);
     }
 }
