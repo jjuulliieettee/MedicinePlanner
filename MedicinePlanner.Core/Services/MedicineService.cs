@@ -12,9 +12,11 @@ namespace MedicinePlanner.Core.Services
     public class MedicineService : IMedicineService
     {
         private readonly IMedicineRepo _medicineRepository;
-        public MedicineService(IMedicineRepo medicineRepository)
+        private readonly IMedicineScheduleService _medicineScheduleService;
+        public MedicineService(IMedicineRepo medicineRepository, IMedicineScheduleService medicineScheduleService)
         {
             _medicineRepository = medicineRepository;
+            _medicineScheduleService = medicineScheduleService;
         }
 
         public async Task<Medicine> AddAsync(Medicine medicine)
@@ -31,7 +33,26 @@ namespace MedicinePlanner.Core.Services
 
         public async Task<Medicine> EditAsync(Medicine medicine)
         {
-            throw new NotImplementedException();
+            Medicine medicineOld = await _medicineRepository.GetByIdToEditAsync(medicine.Id);
+            if (medicineOld == null)
+            {
+                throw new ApiException("Medicine not found!");
+            }
+
+            if ((await _medicineScheduleService.GetAllByMedicineIdAsync(medicine.Id)).Any())
+            {
+                throw new ApiException("Medicine cannot be edited!");
+            }
+
+            IEnumerable<Medicine> existingMedicines = (await _medicineRepository.GetAllByNameAsync(medicine.Name))
+                .Where(med => med.Id != medicine.Id).Where(med => IsMedicineEqual(medicine, med));
+
+            if (existingMedicines.Any())
+            {
+                throw new ApiException("Medicine with such parameters already exists!", 400);
+            }                    
+            
+            return await _medicineRepository.EditAsync(medicine, medicineOld);
         }
 
         public Task<IEnumerable<Medicine>> GetAllAsync()

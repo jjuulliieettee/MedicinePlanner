@@ -26,18 +26,8 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MedicineReadDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<MedicineReadDto>>> GetAll([FromQuery] string name = null)
         {
-            return Ok(_mapper.Map<IEnumerable<MedicineReadDto>>(await _medicineService.GetAllAsync()));
-        }
-
-        [HttpGet("Search")]
-        public async Task<ActionResult<IEnumerable<MedicineReadDto>>> Search([FromQuery]string name)
-        {
-            if(name == null)
-            {
-                return BadRequest();
-            }
             return Ok(_mapper.Map<IEnumerable<MedicineReadDto>>(await _medicineService.GetAllByNameAsync(name)));
         }
 
@@ -55,10 +45,22 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, Medicine medicine)
+        public async Task<IActionResult> Put(Guid id, MedicineEditDto medicineEditDto)
         {
-            //add edit code
-            return NoContent();
+            medicineEditDto.Id = id;
+            if (ModelState.IsValid)
+            {
+                try
+                {                    
+                    await _medicineService.EditAsync(_mapper.Map<Medicine>(medicineEditDto));
+                    return NoContent();
+                }
+                catch (ApiException ex)
+                {
+                    return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
+                }
+            }
+            return BadRequest();
         }
 
         [HttpPost]

@@ -76,7 +76,7 @@ namespace MedicinePlanner.Core.Repositories
         public async Task<IEnumerable<FoodSchedule>> GetAllByDateRangeAndUserIdAsync(DateTimeOffset[] dates, Guid userId)
         {
             var datesOnly = dates.Select(x => x.Date);
-            return await _context.FoodSchedules/*.AsNoTracking()*/.Where(ms => ms.MedicineSchedule.UserId == userId)
+            return await _context.FoodSchedules.Where(ms => ms.MedicineSchedule.UserId == userId)
                 .Where(ms => datesOnly.Contains(ms.Date.Date)).ToListAsync();
         }
     }

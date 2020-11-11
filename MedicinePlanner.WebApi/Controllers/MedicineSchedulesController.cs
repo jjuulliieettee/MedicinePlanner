@@ -28,19 +28,8 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MedicineScheduleReadDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<MedicineScheduleReadDto>>> GetAll([FromQuery] string name = null)
         {
-            Guid userId = User.GetUserId();
-            return Ok(_mapper.Map<IEnumerable<MedicineScheduleReadDto>>(await _medicineScheduleService.GetAllByUserIdAsync(userId)));
-        }
-
-        [HttpGet("Search")]
-        public async Task<ActionResult<IEnumerable<MedicineScheduleReadDto>>> Search([FromQuery] string name)
-        {
-            if (name == null)
-            {
-                return BadRequest();
-            }
             Guid userId = User.GetUserId();
             return Ok(_mapper.Map<IEnumerable<MedicineScheduleReadDto>>(await _medicineScheduleService.GetAllByMedicineAndUserIdAsync(name, userId)));
         }
@@ -79,7 +68,6 @@ namespace MedicinePlanner.WebApi.Controllers
             {
                 try
                 {
-                    medicineSchedule.Id = id;
                     Guid userId = User.GetUserId();
                     medicineSchedule.UserId = userId;
                     await _medicineScheduleService.EditAsync(_mapper.Map<MedicineSchedule>(medicineSchedule));

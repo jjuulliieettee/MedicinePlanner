@@ -8,6 +8,7 @@ namespace MedicinePlanner.Core.Repositories.Interfaces
     public interface IMedicineScheduleRepo
     {
         Task<MedicineSchedule> GetByIdAsync(Guid id);
+        Task<IEnumerable<MedicineSchedule>> GetAllByMedicineIdAsync(Guid medicineId);
         Task<IEnumerable<MedicineSchedule>> GetAllByUserIdAsync(Guid userId);
         Task<IEnumerable<MedicineSchedule>> GetAllByUserIdAndMedicineIdAsync(Guid userId, Guid medicineId);
         Task<IEnumerable<MedicineSchedule>> GetAllByMedicineNameAndUserIdAsync(string medicineName, Guid userId);

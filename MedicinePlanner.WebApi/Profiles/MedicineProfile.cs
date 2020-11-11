@@ -12,6 +12,7 @@ namespace MedicinePlanner.WebApi.Profiles
                 .ForMember(field => field.FoodRelationName, opt => opt.MapFrom(src => src.FoodRelation.Name))
                 .ForMember(field => field.PharmaceuticalFormName, opt => opt.MapFrom(src => src.PharmaceuticalForm.Name));
             CreateMap<MedicineCreateDto, Medicine>();
+            CreateMap<MedicineEditDto, Medicine>();
         }
     }
 }

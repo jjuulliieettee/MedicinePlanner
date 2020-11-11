@@ -41,7 +41,7 @@ namespace MedicinePlanner.Core.Repositories
         {
             return await _context.MedicineSchedules.Include(med => med.Medicine).Include(fr => fr.Medicine.FoodRelation)
                 .Include(pf => pf.Medicine.PharmaceuticalForm).Include(user => user.User).Include(fs => fs.FoodSchedules)
-                .Where(ms => ms.UserId == userId).Where(ms => ms.Medicine.Name.Contains(medicineName))
+                .Where(ms => ms.UserId == userId).Where(ms => medicineName == null || ms.Medicine.Name.Contains(medicineName))
                 .OrderByDescending(ms => ms.StartDate).ToListAsync();
         }
 
@@ -57,6 +57,11 @@ namespace MedicinePlanner.Core.Repositories
             return await _context.MedicineSchedules.Include(med => med.Medicine).Include(fr => fr.Medicine.FoodRelation)
                 .Include(pf => pf.Medicine.PharmaceuticalForm).Include(user => user.User).Include(fs => fs.FoodSchedules)
                 .Where(ms => ms.UserId == userId).Where(ms => ms.MedicineId == medicineId).OrderByDescending(ms => ms.StartDate).ToListAsync();
+        }
+
+        public async Task<IEnumerable<MedicineSchedule>> GetAllByMedicineIdAsync(Guid medicineId)
+        {
+            return await _context.MedicineSchedules.Where(ms => ms.MedicineId == medicineId).ToListAsync();
         }
 
         public async Task<MedicineSchedule> GetByIdAsync(Guid id)

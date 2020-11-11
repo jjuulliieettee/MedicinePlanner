@@ -79,6 +79,11 @@ namespace MedicinePlanner.Core.Services
             return _medicineScheduleRepo.GetAllByMedicineNameAndUserIdAsync(medicineName, userId);
         }
 
+        public Task<IEnumerable<MedicineSchedule>> GetAllByMedicineIdAsync(Guid medicineId)
+        {
+            return _medicineScheduleRepo.GetAllByMedicineIdAsync(medicineId);
+        }
+
         public Task<IEnumerable<MedicineSchedule>> GetAllByUserIdAsync(Guid userId)
         {
             return _medicineScheduleRepo.GetAllByUserIdAsync(userId);
