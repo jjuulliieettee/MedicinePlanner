@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -6,9 +7,11 @@ using MedicinePlanner.Core.Exceptions;
 using MedicinePlanner.Core.Services.Interfaces;
 using MedicinePlanner.Data.Models;
 using MedicinePlanner.WebApi.Auth.Dtos;
+using MedicinePlanner.WebApi.Auth.Extensions;
 using MedicinePlanner.WebApi.Auth.Services.Interfaces;
 using MedicinePlanner.WebApi.Configs;
 using MedicinePlanner.WebApi.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using static Google.Apis.Auth.GoogleJsonWebSignature;
@@ -74,6 +77,14 @@ namespace MedicinePlanner.WebApi.Controllers
             {
                 return StatusCode(401, new { error = true, message = "Invalid token!" });
             }
+        }
+
+        [HttpGet("Me")]
+        [Authorize]
+        public async Task<ActionResult<UserReadDto>> Me()
+        {
+            Guid userId = User.GetUserId();
+            return Ok(_mapper.Map<UserReadDto>(await _userService.GetByIdAsync(userId)));
         }
     }
 }
