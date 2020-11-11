@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20201008085330_InitMigration.Designer.cs" />
     <Compile Remove="Migrations\20201105151755_UpdatedDateTypeInMedicineSchedule.cs" />
     <Compile Remove="Migrations\20201105151755_UpdatedDateTypeInMedicineSchedule.Designer.cs" />
+    <Compile Remove="Migrations\20201111161212_UpdatedUserModel.cs" />
+    <Compile Remove="Migrations\20201111161212_UpdatedUserModel.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

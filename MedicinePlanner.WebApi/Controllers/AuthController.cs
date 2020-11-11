@@ -53,8 +53,14 @@ namespace MedicinePlanner.WebApi.Controllers
                 {
                     return Ok(_authService.Login(userReadDto));
                 }
-                UserCreateDto userToCreate = new UserCreateDto { Email = payload.Email };
-
+                UserCreateDto userToCreate = new UserCreateDto 
+                { 
+                    Email = payload.Email, 
+                    Name = payload.GivenName, 
+                    Surname = payload.FamilyName,
+                    Photo = payload.Picture
+                };
+                
                 User newUser = await _userService.AddAsync(_mapper.Map<User>(userToCreate));
                 UserReadDto newUserDto = _mapper.Map<UserReadDto>(newUser);
 

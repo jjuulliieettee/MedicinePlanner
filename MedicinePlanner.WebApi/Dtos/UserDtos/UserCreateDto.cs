@@ -6,5 +6,11 @@ namespace MedicinePlanner.WebApi.Dtos
     {
         [Required]
         public string Email { get; set; }
+
+        public string Name { get; set; }
+
+        public string Surname { get; set; }
+
+        public string Photo { get; set; }
     }
 }
