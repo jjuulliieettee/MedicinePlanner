@@ -1,10 +1,8 @@
-﻿using MedicinePlanner.Data;
-using MedicinePlanner.Data.Models;
+﻿using MedicinePlanner.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace GasMeterAccounting.Data
+namespace MedicinePlanner.Data
 {
     public static class DataSeed
     {

@@ -20,7 +20,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MedicinePlanner.WebApi.Auth.Configs;
 using System.Text;
-using GasMeterAccounting.Data;
 
 namespace MedicinePlanner.WebApi
 {
