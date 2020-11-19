@@ -30,7 +30,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PharmaceuticalFormDto>> Get(Guid id)
+        public async Task<ActionResult<PharmaceuticalFormDto>> Get([FromRoute]Guid id)
         {
             PharmaceuticalFormDto pharmaceuticalForm = _mapper.Map<PharmaceuticalFormDto>(await _pharmaceuticalFormService.GetByIdAsync(id));
 
@@ -43,7 +43,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, PharmaceuticalFormDto pharmaceuticalForm)
+        public async Task<IActionResult> Put([FromRoute]Guid id, [FromBody]PharmaceuticalFormDto pharmaceuticalForm)
         {
             pharmaceuticalForm.Id = id;
             try
@@ -59,7 +59,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PharmaceuticalFormDto>> Post(PharmaceuticalFormCreateDto pharmaceuticalForm)
+        public async Task<ActionResult<PharmaceuticalFormDto>> Post([FromBody]PharmaceuticalFormCreateDto pharmaceuticalForm)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete([FromRoute]Guid id)
         {
             try
             {

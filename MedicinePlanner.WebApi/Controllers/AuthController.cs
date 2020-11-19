@@ -41,7 +41,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPost("Google")]
-        public async Task<ActionResult<LoginResponseDto>> Google(GoogleAuthDto googleAuth)
+        public async Task<ActionResult<LoginResponseDto>> Google([FromBody]GoogleAuthDto googleAuth)
         {
             Payload payload;
             try

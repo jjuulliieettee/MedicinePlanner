@@ -32,7 +32,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<MedicineReadDto>> Get(Guid id)
+        public async Task<ActionResult<MedicineReadDto>> Get([FromRoute]Guid id)
         {
             MedicineReadDto medicine = _mapper.Map<MedicineReadDto>(await _medicineService.GetByIdAsync(id));
 
@@ -45,7 +45,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, MedicineEditDto medicineEditDto)
+        public async Task<IActionResult> Put([FromRoute]Guid id, [FromBody]MedicineEditDto medicineEditDto)
         {
             medicineEditDto.Id = id;
             if (ModelState.IsValid)
@@ -64,7 +64,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<MedicineReadDto>> Post(MedicineCreateDto medicine)
+        public async Task<ActionResult<MedicineReadDto>> Post([FromBody]MedicineCreateDto medicine)
         {
             if (ModelState.IsValid)
             {

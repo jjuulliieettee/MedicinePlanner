@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MedicinePlanner.WebApi.Auth.Configs;
 using System.Text;
+using GasMeterAccounting.Data;
 
 namespace MedicinePlanner.WebApi
 {
@@ -113,7 +114,7 @@ namespace MedicinePlanner.WebApi
 
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationContext context)
         {
             if (env.IsDevelopment())
             {
@@ -126,6 +127,8 @@ namespace MedicinePlanner.WebApi
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            DataSeed.SeedData(context);
 
             app.UseEndpoints(endpoints =>
             {
