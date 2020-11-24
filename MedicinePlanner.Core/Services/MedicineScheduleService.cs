@@ -74,24 +74,25 @@ namespace MedicinePlanner.Core.Services
             return medicineScheduleNew;
         }
 
-        public Task<IEnumerable<MedicineSchedule>> GetAllByMedicineAndUserIdAsync(string medicineName, Guid userId)
+        public async Task<IEnumerable<MedicineSchedule>> GetAllByMedicineAndUserIdAsync(string medicineName, Guid userId)
         {
-            return _medicineScheduleRepo.GetAllByMedicineNameAndUserIdAsync(medicineName, userId);
+            return (await _medicineScheduleRepo.GetAllByMedicineNameAndUserIdAsync(medicineName, userId))
+                .Where(ms => ms.EndDate.Date >= DateTime.UtcNow.Date);
         }
 
-        public Task<IEnumerable<MedicineSchedule>> GetAllByMedicineIdAsync(Guid medicineId)
+        public async Task<IEnumerable<MedicineSchedule>> GetAllByMedicineIdAsync(Guid medicineId)
         {
-            return _medicineScheduleRepo.GetAllByMedicineIdAsync(medicineId);
+            return await _medicineScheduleRepo.GetAllByMedicineIdAsync(medicineId);
         }
 
-        public Task<IEnumerable<MedicineSchedule>> GetAllByUserIdAsync(Guid userId)
+        public async Task<IEnumerable<MedicineSchedule>> GetAllByUserIdAsync(Guid userId)
         {
-            return _medicineScheduleRepo.GetAllByUserIdAsync(userId);
+            return await _medicineScheduleRepo.GetAllByUserIdAsync(userId);
         }
 
-        public Task<MedicineSchedule> GetByIdAsync(Guid id)
+        public async Task<MedicineSchedule> GetByIdAsync(Guid id)
         {
-            return _medicineScheduleRepo.GetByIdAsync(id);
+            return await _medicineScheduleRepo.GetByIdAsync(id);
         }
 
         private bool DoesMedicineScheduleOverlap(MedicineSchedule ms1, MedicineSchedule ms2)

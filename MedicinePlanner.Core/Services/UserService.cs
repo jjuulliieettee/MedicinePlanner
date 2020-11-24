@@ -26,14 +26,14 @@ namespace MedicinePlanner.Core.Services
             return await _userRepo.AddAsync(user);
         }
 
-        public Task<User> GetByIdAsync(Guid id)
+        public async Task<User> GetByIdAsync(Guid id)
         {
-            return _userRepo.GetByIdAsync(id);
+            return await _userRepo.GetByIdAsync(id);
         }
 
-        public Task<User> GetByEmailAsync(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
-            return _userRepo.GetByEmailAsync(email);
+            return await _userRepo.GetByEmailAsync(email);
         }
     }
 }

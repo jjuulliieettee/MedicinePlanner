@@ -55,24 +55,24 @@ namespace MedicinePlanner.Core.Services
             return await _medicineRepository.EditAsync(medicine, medicineOld);
         }
 
-        public Task<IEnumerable<Medicine>> GetAllAsync()
+        public async Task<IEnumerable<Medicine>> GetAllAsync()
         {
-            return _medicineRepository.GetAllAsync();
+            return await _medicineRepository.GetAllAsync();
         }
 
-        public Task<IEnumerable<Medicine>> GetAllByNameAsync(string name)
+        public async Task<IEnumerable<Medicine>> GetAllByNameAsync(string name)
         {
-            return _medicineRepository.GetAllByNameAsync(name);
+            return await _medicineRepository.GetAllByNameAsync(name);
         }
 
-        public Task<Medicine> GetByIdAsync(Guid id)
+        public async Task<Medicine> GetByIdAsync(Guid id)
         {
-            return _medicineRepository.GetByIdAsync(id);
+            return await _medicineRepository.GetByIdAsync(id);
         }
 
-        public Task<Medicine> GetByNameAsync(string name)
+        public async Task<Medicine> GetByNameAsync(string name)
         {
-            return _medicineRepository.GetByNameAsync(name);
+            return await _medicineRepository.GetByNameAsync(name);
         }
 
         private bool IsMedicineEqual(Medicine med1, Medicine med2)

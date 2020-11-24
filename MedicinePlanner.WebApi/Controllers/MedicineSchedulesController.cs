@@ -34,6 +34,12 @@ namespace MedicinePlanner.WebApi.Controllers
             return Ok(_mapper.Map<IEnumerable<MedicineScheduleReadDto>>(await _medicineScheduleService.GetAllByMedicineAndUserIdAsync(name, userId)));
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MedicineScheduleReadDto>> GetById([FromRoute] Guid id)
+        {
+            return Ok(_mapper.Map<MedicineScheduleReadDto>(await _medicineScheduleService.GetByIdAsync(id)));
+        }
+
         [HttpPost]
         public async Task<ActionResult<IEnumerable<MedicineScheduleReadDto>>> Post([FromBody]FoodScheduleAddDto foodAndMedicineSchedules)
         {
@@ -105,6 +111,12 @@ namespace MedicinePlanner.WebApi.Controllers
         public async Task<ActionResult<FoodScheduleReadDto>> SearchFoodSchedule([FromQuery]DateTimeOffset date, [FromRoute]Guid medicineScheduleId)
         {
             return Ok(_mapper.Map<FoodScheduleReadDto>(await _foodScheduleService.GetByDateAsync(date, medicineScheduleId)));
+        }
+
+        [HttpGet("FoodSchedules/{id}")]
+        public async Task<ActionResult<FoodScheduleReadDto>> GetFoodScheduleById([FromRoute] Guid id)
+        {
+            return Ok(_mapper.Map<FoodScheduleReadDto>(await _foodScheduleService.GetByIdAsync(id)));
         }
 
         [HttpPost("FoodSchedules/MakeDefault")]

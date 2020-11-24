@@ -63,19 +63,19 @@ namespace MedicinePlanner.Core.Services
             return await _foodRelationRepo.EditAsync(foodRelation);
         }
 
-        public Task<IEnumerable<FoodRelation>> GetAllAsync()
+        public async Task<IEnumerable<FoodRelation>> GetAllAsync()
         {
-            return _foodRelationRepo.GetAllAsync();
+            return await _foodRelationRepo.GetAllAsync();
         }
 
-        public Task<FoodRelation> GetByIdAsync(Guid id)
+        public async Task<FoodRelation> GetByIdAsync(Guid id)
         {
-            return _foodRelationRepo.GetByIdAsync(id);
+            return await _foodRelationRepo.GetByIdAsync(id);
         }
 
-        public Task<FoodRelation> GetByNameAsync(string name)
+        public async Task<FoodRelation> GetByNameAsync(string name)
         {
-            return _foodRelationRepo.GetByNameAsync(name);
+            return await _foodRelationRepo.GetByNameAsync(name);
         }
     }
 }

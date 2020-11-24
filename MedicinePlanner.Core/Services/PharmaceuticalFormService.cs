@@ -63,19 +63,19 @@ namespace MedicinePlanner.Core.Services
             return await _pharmaceuticalFormRepo.EditAsync(pharmaceuticalForm);
         }
 
-        public Task<IEnumerable<PharmaceuticalForm>> GetAllAsync()
+        public async Task<IEnumerable<PharmaceuticalForm>> GetAllAsync()
         {
-            return _pharmaceuticalFormRepo.GetAllAsync();
+            return await _pharmaceuticalFormRepo.GetAllAsync();
         }
 
-        public Task<PharmaceuticalForm> GetByIdAsync(Guid id)
+        public async Task<PharmaceuticalForm> GetByIdAsync(Guid id)
         {
-            return _pharmaceuticalFormRepo.GetByIdAsync(id);
+            return await _pharmaceuticalFormRepo.GetByIdAsync(id);
         }
 
-        public Task<PharmaceuticalForm> GetByNameAsync(string name)
+        public async Task<PharmaceuticalForm> GetByNameAsync(string name)
         {
-            return _pharmaceuticalFormRepo.GetByNameAsync(name);
+            return await _pharmaceuticalFormRepo.GetByNameAsync(name);
         }
     }
 }
