@@ -101,13 +101,13 @@ namespace MedicinePlanner.WebApi.Controllers
             }
         }
 
-        [HttpGet("GetForMedicineSchedule/{medicineScheduleId}")]
+        [HttpGet("GetFoodSchedules/{medicineScheduleId}")]
         public async Task<ActionResult<IEnumerable<FoodScheduleReadDto>>> GetAllFoodSchedules([FromRoute] Guid medicineScheduleId)
         {
             return Ok(_mapper.Map<IEnumerable<FoodScheduleReadDto>>(await _foodScheduleService.GetAllByMedicineScheduleIdAsync(medicineScheduleId)));
         }
 
-        [HttpGet("GetForMedicineSchedule/{medicineScheduleId}/SearchFoodSchedule")]
+        [HttpGet("{medicineScheduleId}/SearchFoodSchedule")]
         public async Task<ActionResult<FoodScheduleReadDto>> SearchFoodSchedule([FromQuery] DateTimeOffset date, [FromRoute] Guid medicineScheduleId)
         {
             return Ok(_mapper.Map<FoodScheduleReadDto>(await _foodScheduleService.GetByDateAsync(date, medicineScheduleId)));
