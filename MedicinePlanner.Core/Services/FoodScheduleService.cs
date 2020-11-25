@@ -76,6 +76,7 @@ namespace MedicinePlanner.Core.Services
             }
 
             foodSchedule.Date = foodScheduleOld.Date;
+            foodSchedule.MedicineScheduleId = foodScheduleOld.MedicineScheduleId;
 
             List<DateTimeOffset> dates = new List<DateTimeOffset>() { foodSchedule.Date };
 
