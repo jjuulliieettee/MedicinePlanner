@@ -17,7 +17,7 @@ namespace MedicinePlanner.WebApi.Dtos
         [Required]
         public int NumberOfTakes { get; set; }
 
-        public int FoodInterval { get; set; }
+        public int? FoodInterval { get; set; }
 
         public Guid PharmaceuticalFormId { get; set; }
 

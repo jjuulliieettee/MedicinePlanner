@@ -75,6 +75,8 @@ namespace MedicinePlanner.Core.Services
                 throw new ApiException("Food schedule not found!");
             }
 
+            foodSchedule.Date = foodScheduleOld.Date;
+
             List<DateTimeOffset> dates = new List<DateTimeOffset>() { foodSchedule.Date };
 
             List<FoodSchedule> notEditableFoodSchedules = new List<FoodSchedule>() { await _foodScheduleRepo.EditAsync(foodSchedule) };

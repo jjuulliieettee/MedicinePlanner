@@ -41,7 +41,7 @@ namespace MedicinePlanner.Core.Services
 
             if ((await _medicineScheduleService.GetAllByMedicineIdAsync(medicine.Id)).Any())
             {
-                throw new ApiException("Medicine cannot be edited!");
+                throw new ApiException("Medicine cannot be edited!", 400);
             }
 
             IEnumerable<Medicine> existingMedicines = (await _medicineRepository.GetAllByNameAsync(medicine.Name))
