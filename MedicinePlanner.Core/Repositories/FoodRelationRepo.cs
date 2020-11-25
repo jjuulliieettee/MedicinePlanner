@@ -1,8 +1,8 @@
 ﻿using MedicinePlanner.Core.Repositories.Interfaces;
 using MedicinePlanner.Data;
+using MedicinePlanner.Data.Enums;
 using MedicinePlanner.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -41,7 +41,7 @@ namespace MedicinePlanner.Core.Repositories
             return await _context.FoodRelations.ToListAsync();
         }
 
-        public async Task<FoodRelation> GetByIdAsync(Guid id)
+        public async Task<FoodRelation> GetByIdAsync(FoodRelationType id)
         {
             return await _context.FoodRelations.AsNoTracking().FirstOrDefaultAsync(fr => fr.Id == id);
         }

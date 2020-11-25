@@ -8,6 +8,7 @@ using AutoMapper;
 using MedicinePlanner.WebApi.Dtos;
 using MedicinePlanner.Core.Exceptions;
 using Microsoft.AspNetCore.Authorization;
+using MedicinePlanner.Data.Enums;
 
 namespace MedicinePlanner.WebApi.Controllers
 {
@@ -32,7 +33,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PharmaceuticalFormDto>> Get([FromRoute]Guid id)
+        public async Task<ActionResult<PharmaceuticalFormDto>> Get([FromRoute] PharmaceuticalFormType id)
         {
             PharmaceuticalFormDto pharmaceuticalForm = _mapper.Map<PharmaceuticalFormDto>(await _pharmaceuticalFormService.GetByIdAsync(id));
 
@@ -45,7 +46,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute]Guid id, [FromBody]PharmaceuticalFormDto pharmaceuticalForm)
+        public async Task<IActionResult> Put([FromRoute] PharmaceuticalFormType id, [FromBody]PharmaceuticalFormDto pharmaceuticalForm)
         {
             pharmaceuticalForm.Id = id;
             try
@@ -81,7 +82,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete([FromRoute]Guid id)
+        public async Task<ActionResult> Delete([FromRoute] PharmaceuticalFormType id)
         {
             try
             {

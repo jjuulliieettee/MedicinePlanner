@@ -8,6 +8,7 @@ using AutoMapper;
 using MedicinePlanner.WebApi.Dtos;
 using MedicinePlanner.Core.Exceptions;
 using Microsoft.AspNetCore.Authorization;
+using MedicinePlanner.Data.Enums;
 
 namespace MedicinePlanner.WebApi.Controllers
 {
@@ -32,7 +33,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<FoodRelationDto>> Get([FromRoute]Guid id)
+        public async Task<ActionResult<FoodRelationDto>> Get([FromRoute] FoodRelationType id)
         {
             FoodRelationDto foodRelation = _mapper.Map<FoodRelationDto>(await _foodRelationService.GetByIdAsync(id));
 
@@ -45,7 +46,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<FoodRelationDto>> Put([FromRoute] Guid id, [FromBody]FoodRelationDto foodRelation)
+        public async Task<ActionResult<FoodRelationDto>> Put([FromRoute] FoodRelationType id, [FromBody]FoodRelationDto foodRelation)
         {
             foodRelation.Id = id;
             try
@@ -79,7 +80,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete([FromRoute]Guid id)
+        public async Task<ActionResult> Delete([FromRoute] FoodRelationType id)
         {
             try
             {

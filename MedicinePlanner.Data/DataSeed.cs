@@ -1,4 +1,5 @@
-﻿using MedicinePlanner.Data.Models;
+﻿using MedicinePlanner.Data.Enums;
+using MedicinePlanner.Data.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,18 +22,22 @@ namespace MedicinePlanner.Data
                 {
                     new FoodRelation
                     {
+                        Id = FoodRelationType.BeforeFood,
                         Name = "Before meal"
                     },
                     new FoodRelation
                     {
+                        Id = FoodRelationType.AfterFood,
                         Name = "After meal"
                     },
                     new FoodRelation
                     {
+                        Id = FoodRelationType.DuringMeal,
                         Name = "During meal"
                     },
                     new FoodRelation
                     {
+                        Id = FoodRelationType.RegardlessOfMeal,
                         Name = "Regardless of meal"
                     }
                 };
@@ -49,11 +54,23 @@ namespace MedicinePlanner.Data
                 {
                     new PharmaceuticalForm
                     {
+                        Id = PharmaceuticalFormType.Pills,
                         Name = "Pills"
                     },
                     new PharmaceuticalForm
                     {
+                        Id = PharmaceuticalFormType.Liquid,
                         Name = "Liquid"
+                    },
+                    new PharmaceuticalForm
+                    {
+                        Id = PharmaceuticalFormType.Powder,
+                        Name = "Powder"
+                    },
+                    new PharmaceuticalForm
+                    {
+                        Id = PharmaceuticalFormType.Balm,
+                        Name = "Balm"
                     }
                 };
                 context.PharmaceuticalForms.AddRange(pharmaceuticalForms);

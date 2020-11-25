@@ -21,9 +21,8 @@ namespace MedicinePlanner.Data.Migrations
 
             modelBuilder.Entity("MedicinePlanner.Data.Models.FoodRelation", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -75,8 +74,8 @@ namespace MedicinePlanner.Data.Migrations
                     b.Property<int?>("FoodInterval")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("FoodRelationId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("FoodRelationId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -85,8 +84,8 @@ namespace MedicinePlanner.Data.Migrations
                     b.Property<int>("NumberOfTakes")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("PharmaceuticalFormId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("PharmaceuticalFormId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -126,9 +125,8 @@ namespace MedicinePlanner.Data.Migrations
 
             modelBuilder.Entity("MedicinePlanner.Data.Models.PharmaceuticalForm", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()

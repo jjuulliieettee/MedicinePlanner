@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MedicinePlanner.Data.Migrations
 {
-    public partial class InitMigration : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +11,7 @@ namespace MedicinePlanner.Data.Migrations
                 name: "FoodRelations",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -23,7 +23,7 @@ namespace MedicinePlanner.Data.Migrations
                 name: "PharmaceuticalForms",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -36,7 +36,10 @@ namespace MedicinePlanner.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Email = table.Column<string>(nullable: false)
+                    Email = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Surname = table.Column<string>(nullable: true),
+                    Photo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -52,9 +55,9 @@ namespace MedicinePlanner.Data.Migrations
                     ActiveSubstance = table.Column<string>(nullable: false),
                     Dosage = table.Column<int>(nullable: false),
                     NumberOfTakes = table.Column<int>(nullable: false),
-                    FoodInterval = table.Column<int>(nullable: false),
-                    PharmaceuticalFormId = table.Column<Guid>(nullable: false),
-                    FoodRelationId = table.Column<Guid>(nullable: false)
+                    FoodInterval = table.Column<int>(nullable: true),
+                    PharmaceuticalFormId = table.Column<int>(nullable: false),
+                    FoodRelationId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,8 +81,8 @@ namespace MedicinePlanner.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    StartDate = table.Column<DateTime>(nullable: false),
-                    EndDate = table.Column<DateTime>(nullable: false),
+                    StartDate = table.Column<DateTimeOffset>(nullable: false),
+                    EndDate = table.Column<DateTimeOffset>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
                     MedicineId = table.Column<Guid>(nullable: false)
                 },
@@ -105,8 +108,8 @@ namespace MedicinePlanner.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: false),
-                    TimeOfFirstMeal = table.Column<DateTime>(nullable: false),
+                    Date = table.Column<DateTimeOffset>(nullable: false),
+                    TimeOfFirstMeal = table.Column<DateTimeOffset>(nullable: false),
                     NumberOfMeals = table.Column<int>(nullable: false),
                     MedicineScheduleId = table.Column<Guid>(nullable: false)
                 },
@@ -129,14 +132,12 @@ namespace MedicinePlanner.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Medicines_FoodRelationId",
                 table: "Medicines",
-                column: "FoodRelationId",
-                unique: true);
+                column: "FoodRelationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Medicines_PharmaceuticalFormId",
                 table: "Medicines",
-                column: "PharmaceuticalFormId",
-                unique: true);
+                column: "PharmaceuticalFormId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicineSchedules_MedicineId",
@@ -147,6 +148,12 @@ namespace MedicinePlanner.Data.Migrations
                 name: "IX_MedicineSchedules_UserId",
                 table: "MedicineSchedules",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

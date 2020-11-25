@@ -1,8 +1,8 @@
 ﻿using MedicinePlanner.Core.Exceptions;
 using MedicinePlanner.Core.Repositories.Interfaces;
 using MedicinePlanner.Core.Services.Interfaces;
+using MedicinePlanner.Data.Enums;
 using MedicinePlanner.Data.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,7 +25,7 @@ namespace MedicinePlanner.Core.Services
             return await _pharmaceuticalFormRepo.AddAsync(pharmaceuticalForm);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(PharmaceuticalFormType id)
         {
             PharmaceuticalForm pharmaceuticalForm = await _pharmaceuticalFormRepo.GetByIdAsync(id);
             
@@ -68,7 +68,7 @@ namespace MedicinePlanner.Core.Services
             return await _pharmaceuticalFormRepo.GetAllAsync();
         }
 
-        public async Task<PharmaceuticalForm> GetByIdAsync(Guid id)
+        public async Task<PharmaceuticalForm> GetByIdAsync(PharmaceuticalFormType id)
         {
             return await _pharmaceuticalFormRepo.GetByIdAsync(id);
         }

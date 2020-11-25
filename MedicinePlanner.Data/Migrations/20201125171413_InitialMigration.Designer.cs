@@ -10,22 +10,21 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedicinePlanner.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20201008093311_InitMigration")]
-    partial class InitMigration
+    [Migration("20201125171413_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("MedicinePlanner.Data.Models.FoodRelation", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -42,8 +41,8 @@ namespace MedicinePlanner.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("MedicineScheduleId")
                         .HasColumnType("uniqueidentifier");
@@ -51,8 +50,8 @@ namespace MedicinePlanner.Data.Migrations
                     b.Property<int>("NumberOfMeals")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("TimeOfFirstMeal")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("TimeOfFirstMeal")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -74,11 +73,11 @@ namespace MedicinePlanner.Data.Migrations
                     b.Property<int>("Dosage")
                         .HasColumnType("int");
 
-                    b.Property<int>("FoodInterval")
+                    b.Property<int?>("FoodInterval")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("FoodRelationId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("FoodRelationId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -87,16 +86,14 @@ namespace MedicinePlanner.Data.Migrations
                     b.Property<int>("NumberOfTakes")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("PharmaceuticalFormId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("PharmaceuticalFormId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FoodRelationId")
-                        .IsUnique();
+                    b.HasIndex("FoodRelationId");
 
-                    b.HasIndex("PharmaceuticalFormId")
-                        .IsUnique();
+                    b.HasIndex("PharmaceuticalFormId");
 
                     b.ToTable("Medicines");
                 });
@@ -107,14 +104,14 @@ namespace MedicinePlanner.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("EndDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("MedicineId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("StartDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -130,9 +127,8 @@ namespace MedicinePlanner.Data.Migrations
 
             modelBuilder.Entity("MedicinePlanner.Data.Models.PharmaceuticalForm", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -151,9 +147,21 @@ namespace MedicinePlanner.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Photo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -170,14 +178,14 @@ namespace MedicinePlanner.Data.Migrations
             modelBuilder.Entity("MedicinePlanner.Data.Models.Medicine", b =>
                 {
                     b.HasOne("MedicinePlanner.Data.Models.FoodRelation", "FoodRelation")
-                        .WithOne("Medicine")
-                        .HasForeignKey("MedicinePlanner.Data.Models.Medicine", "FoodRelationId")
+                        .WithMany("Medicine")
+                        .HasForeignKey("FoodRelationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MedicinePlanner.Data.Models.PharmaceuticalForm", "PharmaceuticalForm")
-                        .WithOne("Medicine")
-                        .HasForeignKey("MedicinePlanner.Data.Models.Medicine", "PharmaceuticalFormId")
+                        .WithMany("Medicine")
+                        .HasForeignKey("PharmaceuticalFormId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

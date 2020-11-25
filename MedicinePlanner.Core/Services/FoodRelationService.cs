@@ -1,6 +1,7 @@
 ﻿using MedicinePlanner.Core.Exceptions;
 using MedicinePlanner.Core.Repositories.Interfaces;
 using MedicinePlanner.Core.Services.Interfaces;
+using MedicinePlanner.Data.Enums;
 using MedicinePlanner.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace MedicinePlanner.Core.Services
             return await _foodRelationRepo.AddAsync(foodRelation);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(FoodRelationType id)
         {
             FoodRelation foodRelation = await _foodRelationRepo.GetByIdAsync(id);
 
@@ -68,7 +69,7 @@ namespace MedicinePlanner.Core.Services
             return await _foodRelationRepo.GetAllAsync();
         }
 
-        public async Task<FoodRelation> GetByIdAsync(Guid id)
+        public async Task<FoodRelation> GetByIdAsync(FoodRelationType id)
         {
             return await _foodRelationRepo.GetByIdAsync(id);
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MedicinePlanner.Data.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -22,9 +23,9 @@ namespace MedicinePlanner.Data.Models
                 
         public int? FoodInterval { get; set; }
 
-        public Guid PharmaceuticalFormId { get; set; }
+        public PharmaceuticalFormType PharmaceuticalFormId { get; set; }
 
-        public Guid FoodRelationId { get; set; }
+        public FoodRelationType FoodRelationId { get; set; }
 
         public virtual PharmaceuticalForm PharmaceuticalForm { get; set; }
 

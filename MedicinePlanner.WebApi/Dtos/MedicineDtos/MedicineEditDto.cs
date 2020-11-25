@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MedicinePlanner.Data.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace MedicinePlanner.WebApi.Dtos
@@ -21,8 +22,8 @@ namespace MedicinePlanner.WebApi.Dtos
 
         public int FoodInterval { get; set; }
 
-        public Guid PharmaceuticalFormId { get; set; }
+        public PharmaceuticalFormType PharmaceuticalFormId { get; set; }
 
-        public Guid FoodRelationId { get; set; }
+        public FoodRelationType FoodRelationId { get; set; }
     }
 }
