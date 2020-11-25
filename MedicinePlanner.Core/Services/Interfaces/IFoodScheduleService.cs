@@ -12,7 +12,7 @@ namespace MedicinePlanner.Core.Services.Interfaces
         Task<IEnumerable<FoodSchedule>> GetAllByMedicineScheduleIdAsync(Guid medicineScheduleId);
         Task AddAsync(FoodSchedule foodSchedule, IEnumerable<MedicineSchedule> medicineSchedules);
         Task<FoodSchedule> EditAsync(FoodSchedule foodSchedule, Guid userId);
-        Task EditAllBasedOnFoodScheduleAsync(FoodSchedule foodSchedule, Guid userId);
+        Task EditAllBasedOnFoodScheduleAsync(Guid foodScheduleId, Guid userId);
         Task EditAllBasedOnMedicineScheduleAsync(MedicineSchedule medicineSchedule);
         Task DeleteAsync(Guid id);
         Task DeleteAllAsync(Guid medicineScheduleId);

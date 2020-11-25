@@ -59,6 +59,8 @@ namespace MedicinePlanner.Core.Services
                 throw new ApiException("Medicine schedule not found!");
             }
 
+            medicineSchedule.MedicineId = medicineScheduleOld.MedicineId;
+
             IEnumerable<MedicineSchedule> existingMedicineSchedules = (await _medicineScheduleRepo.GetAllByUserIdAndMedicineIdAsync
                 (medicineSchedule.UserId, medicineSchedule.MedicineId))
                 .Where(ms => ms.EndDate.Date >= DateTime.UtcNow.Date).Where(ms => ms.Id != medicineSchedule.Id);

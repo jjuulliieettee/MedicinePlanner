@@ -84,8 +84,14 @@ namespace MedicinePlanner.Core.Services
             return foodSchedule;
         }
 
-        public async Task EditAllBasedOnFoodScheduleAsync(FoodSchedule foodSchedule, Guid userId)
+        public async Task EditAllBasedOnFoodScheduleAsync(Guid foodScheduleId, Guid userId)
         {
+            FoodSchedule foodSchedule = await _foodScheduleRepo.GetByIdAsync(foodScheduleId);
+            if (foodSchedule == null)
+            {
+                throw new ApiException("Food schedule not found!");
+            }
+
             IEnumerable<FoodSchedule> foodSchedules = (await _foodScheduleRepo.GetAllByMedicineScheduleIdAsync(foodSchedule.MedicineScheduleId))
                 .Where(fs => fs.Date.Date >= DateTime.UtcNow.Date);
 

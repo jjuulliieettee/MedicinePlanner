@@ -86,7 +86,7 @@ namespace MedicinePlanner.WebApi.Controllers
             try
             {
                 await _pharmaceuticalFormService.DeleteAsync(id);
-                return NoContent();
+                return Ok(new { message = "Success" });
             }
             catch (ApiException ex)
             {

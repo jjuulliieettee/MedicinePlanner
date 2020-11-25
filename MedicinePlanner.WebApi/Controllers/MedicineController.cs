@@ -53,7 +53,7 @@ namespace MedicinePlanner.WebApi.Controllers
                 try
                 {                    
                     await _medicineService.EditAsync(_mapper.Map<Medicine>(medicineEditDto));
-                    return NoContent();
+                    return Ok(new { message = "Success" });
                 }
                 catch (ApiException ex)
                 {

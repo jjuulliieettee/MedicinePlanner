@@ -41,7 +41,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<MedicineScheduleReadDto>>> Post([FromBody]FoodScheduleAddDto foodAndMedicineSchedules)
+        public async Task<ActionResult<IEnumerable<MedicineScheduleReadDto>>> Post([FromBody] FoodScheduleAddDto foodAndMedicineSchedules)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute]Guid id, [FromBody]MedicineScheduleEditDto medicineSchedule)
+        public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] MedicineScheduleEditDto medicineSchedule)
         {
             medicineSchedule.Id = id;
             if (ModelState.IsValid)
@@ -77,23 +77,23 @@ namespace MedicinePlanner.WebApi.Controllers
                     Guid userId = User.GetUserId();
                     medicineSchedule.UserId = userId;
                     await _medicineScheduleService.EditAsync(_mapper.Map<MedicineSchedule>(medicineSchedule));
-                    return NoContent();
+                    return Ok(new { message = "Success" });
                 }
-                catch(ApiException ex)
+                catch (ApiException ex)
                 {
                     return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
                 }
             }
-            return BadRequest();            
+            return BadRequest();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute]Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             try
             {
                 await _medicineScheduleService.DeleteAsync(id);
-                return NoContent();
+                return Ok(new { message = "Success" });
             }
             catch (ApiException ex)
             {
@@ -102,13 +102,13 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpGet("GetForMedicineSchedule/{medicineScheduleId}")]
-        public async Task<ActionResult<IEnumerable<FoodScheduleReadDto>>> GetAllFoodSchedules([FromRoute]Guid medicineScheduleId)
+        public async Task<ActionResult<IEnumerable<FoodScheduleReadDto>>> GetAllFoodSchedules([FromRoute] Guid medicineScheduleId)
         {
             return Ok(_mapper.Map<IEnumerable<FoodScheduleReadDto>>(await _foodScheduleService.GetAllByMedicineScheduleIdAsync(medicineScheduleId)));
         }
 
         [HttpGet("GetForMedicineSchedule/{medicineScheduleId}/SearchFoodSchedule")]
-        public async Task<ActionResult<FoodScheduleReadDto>> SearchFoodSchedule([FromQuery]DateTimeOffset date, [FromRoute]Guid medicineScheduleId)
+        public async Task<ActionResult<FoodScheduleReadDto>> SearchFoodSchedule([FromQuery] DateTimeOffset date, [FromRoute] Guid medicineScheduleId)
         {
             return Ok(_mapper.Map<FoodScheduleReadDto>(await _foodScheduleService.GetByDateAsync(date, medicineScheduleId)));
         }
@@ -119,30 +119,25 @@ namespace MedicinePlanner.WebApi.Controllers
             return Ok(_mapper.Map<FoodScheduleReadDto>(await _foodScheduleService.GetByIdAsync(id)));
         }
 
-        [HttpPost("FoodSchedules/MakeDefault")]
-        public async Task<ActionResult> MakeDefault([FromBody]FoodScheduleEditDto foodScheduleDto)
-        {
-            if (ModelState.IsValid)
+        [HttpPost("FoodSchedules/MakeDefault/{id}")]
+        public async Task<ActionResult> MakeDefault([FromRoute] Guid id)
+        {            
+            try
             {
-                try
-                {
-                    Guid userId = User.GetUserId();
-                    FoodSchedule foodSchedule = _mapper.Map<FoodSchedule>(foodScheduleDto);
+                Guid userId = User.GetUserId();
 
-                    await _foodScheduleService.EditAllBasedOnFoodScheduleAsync(foodSchedule, userId);
+                await _foodScheduleService.EditAllBasedOnFoodScheduleAsync(id, userId);
 
-                    return NoContent();
-                }
-                catch (ApiException ex)
-                {
-                    return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
-                }
+                return Ok(new { message = "Success"});
             }
-            return BadRequest();
+            catch (ApiException ex)
+            {
+                return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
+            }
         }
 
         [HttpPut("FoodSchedules/{id}")]
-        public async Task<ActionResult> EditFoodSchedule([FromRoute]Guid id, [FromBody]FoodScheduleEditDto foodScheduleEditDto)
+        public async Task<ActionResult> EditFoodSchedule([FromRoute] Guid id, [FromBody] FoodScheduleEditDto foodScheduleEditDto)
         {
             if (ModelState.IsValid)
             {
@@ -154,7 +149,7 @@ namespace MedicinePlanner.WebApi.Controllers
 
                     await _foodScheduleService.EditAsync(foodSchedule, userId);
 
-                    return NoContent();
+                    return Ok(new { message = "Success" });
                 }
                 catch (ApiException ex)
                 {
@@ -165,12 +160,12 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpDelete("FoodSchedules/{id}")]
-        public async Task<IActionResult> DeleteFoodSchedule([FromRoute]Guid id)
+        public async Task<IActionResult> DeleteFoodSchedule([FromRoute] Guid id)
         {
             try
             {
                 await _foodScheduleService.DeleteAsync(id);
-                return NoContent();
+                return Ok(new { message = "Success" });
             }
             catch (ApiException ex)
             {
