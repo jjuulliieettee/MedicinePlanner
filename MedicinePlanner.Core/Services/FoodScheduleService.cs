@@ -156,8 +156,8 @@ namespace MedicinePlanner.Core.Services
             foreach (FoodSchedule foodSched in foodSchedules)
             {
                 foodSched.TimeOfFirstMeal = new DateTimeOffset(foodSched.TimeOfFirstMeal.Year, foodSched.TimeOfFirstMeal.Month,
-                    foodSched.TimeOfFirstMeal.Day, foodSchedule.TimeOfFirstMeal.Hour, foodSchedule.TimeOfFirstMeal.Second,
-                    foodSchedule.TimeOfFirstMeal.Millisecond, new TimeSpan(0, 0, 0));
+                    foodSched.TimeOfFirstMeal.Day, foodSchedule.TimeOfFirstMeal.Hour, foodSchedule.TimeOfFirstMeal.Minute,
+                    foodSchedule.TimeOfFirstMeal.Second, foodSchedule.TimeOfFirstMeal.Millisecond, new TimeSpan(0, 0, 0));
 
                 foodSched.NumberOfMeals = foodSchedule.NumberOfMeals;
             }
