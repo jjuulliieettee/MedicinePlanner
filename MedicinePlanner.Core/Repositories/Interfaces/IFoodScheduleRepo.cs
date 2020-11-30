@@ -9,6 +9,7 @@ namespace MedicinePlanner.Core.Repositories.Interfaces
     {
         Task<FoodSchedule> GetByIdAsync(Guid id);
         Task<IEnumerable<FoodSchedule>> GetAllByMedicineScheduleIdAsync(Guid medicineScheduleId);
+        Task<IEnumerable<FoodSchedule>> GetAllByMedicineScheduleIdRangeAsync(MedicineSchedule[] medicineSchedules);
         Task<IEnumerable<FoodSchedule>> GetAllByDateAndUserIdAsync(DateTimeOffset date, Guid userId);
         Task<IEnumerable<FoodSchedule>> GetAllByDateRangeAndUserIdAsync(DateTimeOffset[] dates, Guid userId);
         Task<FoodSchedule> GetByDateAsync(DateTimeOffset date, Guid medicineScheduleId);

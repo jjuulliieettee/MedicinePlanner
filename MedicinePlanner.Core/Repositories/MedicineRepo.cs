@@ -33,31 +33,47 @@ namespace MedicinePlanner.Core.Repositories
 
         public async Task<Medicine> GetByIdAsync(Guid id)
         {
-            return await _context.Medicines.AsNoTracking().Include(fr => fr.FoodRelation).Include(pf => pf.PharmaceuticalForm)
-                .Include(ms => ms.MedicineSchedules).FirstOrDefaultAsync(med => med.Id == id);
+            return await _context.Medicines
+                                 .AsNoTracking()
+                                 .Include(fr => fr.FoodRelation)
+                                 .Include(pf => pf.PharmaceuticalForm)
+                                 .Include(ms => ms.MedicineSchedules)
+                                 .FirstOrDefaultAsync(med => med.Id == id);
         }
 
         public async Task<IEnumerable<Medicine>> GetAllAsync()
         {
-            return await _context.Medicines.Include(fr => fr.FoodRelation).Include(pf => pf.PharmaceuticalForm)
-                .Include(ms => ms.MedicineSchedules).ToListAsync();
+            return await _context.Medicines
+                                 .Include(fr => fr.FoodRelation)
+                                 .Include(pf => pf.PharmaceuticalForm)
+                                 .Include(ms => ms.MedicineSchedules)
+                                 .ToListAsync();
         }
 
         public async Task<Medicine> GetByNameAsync(string name)
         {
-            return await _context.Medicines.AsNoTracking().Include(fr => fr.FoodRelation).Include(pf => pf.PharmaceuticalForm)
-                .Include(ms => ms.MedicineSchedules).FirstOrDefaultAsync(med => med.Name == name);
+            return await _context.Medicines
+                                 .AsNoTracking()
+                                 .Include(fr => fr.FoodRelation)
+                                 .Include(pf => pf.PharmaceuticalForm)
+                                 .Include(ms => ms.MedicineSchedules)
+                                 .FirstOrDefaultAsync(med => med.Name == name);
         }
 
         public async Task<IEnumerable<Medicine>> GetAllByNameAsync(string name)
         {
-            return await _context.Medicines.Include(fr => fr.FoodRelation).Include(pf => pf.PharmaceuticalForm)
-                .Include(ms => ms.MedicineSchedules).Where(med => name == null || med.Name.Contains(name)).ToListAsync();
+            return await _context.Medicines
+                                 .Include(fr => fr.FoodRelation)
+                                 .Include(pf => pf.PharmaceuticalForm)
+                                 .Include(ms => ms.MedicineSchedules)
+                                 .Where(med => name == null || med.Name.Contains(name))
+                                 .ToListAsync();
         }
 
         public async Task<Medicine> GetByIdToEditAsync(Guid id)
         {
-            return await _context.Medicines.FirstOrDefaultAsync(med => med.Id == id);
+            return await _context.Medicines
+                                 .FirstOrDefaultAsync(med => med.Id == id);
         }
     }
 }

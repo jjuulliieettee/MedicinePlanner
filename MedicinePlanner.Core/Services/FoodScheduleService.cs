@@ -2,11 +2,11 @@
 using MedicinePlanner.Core.Repositories.Interfaces;
 using MedicinePlanner.Core.Services.Interfaces;
 using MedicinePlanner.Data.Models;
-using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MedicinePlanner.Core.Services.GoogleCalendar;
 
 namespace MedicinePlanner.Core.Services
 {
@@ -152,17 +152,22 @@ namespace MedicinePlanner.Core.Services
         {
 
             IEnumerable<FoodSchedule> foodSchedules = (await _foodScheduleRepo.GetAllByDateRangeAndUserIdAsync(dates.ToArray(), userId))
-                .Where(foodSched => !staticFoodSchedules.Any(fs => fs.Id == foodSched.Id));
+                .Where(foodSched => staticFoodSchedules.All(fs => fs.Id != foodSched.Id));
             foreach (FoodSchedule foodSched in foodSchedules)
             {
                 foodSched.TimeOfFirstMeal = new DateTimeOffset(foodSched.TimeOfFirstMeal.Year, foodSched.TimeOfFirstMeal.Month,
                     foodSched.TimeOfFirstMeal.Day, foodSchedule.TimeOfFirstMeal.Hour, foodSchedule.TimeOfFirstMeal.Minute,
-                    foodSchedule.TimeOfFirstMeal.Second, foodSchedule.TimeOfFirstMeal.Millisecond, new TimeSpan(0, 0, 0));
+                    foodSchedule.TimeOfFirstMeal.Second, new TimeSpan(0, 0, 0));
 
                 foodSched.NumberOfMeals = foodSchedule.NumberOfMeals;
             }
 
             await _foodScheduleRepo.EditAllAsync(foodSchedules);
+        }
+
+        public async Task<IEnumerable<FoodSchedule>> GetAllByMedicineScheduleIdRangeAsync(MedicineSchedule[] medicineSchedules)
+        {
+            return await _foodScheduleRepo.GetAllByMedicineScheduleIdRangeAsync(medicineSchedules);
         }
     }
 }

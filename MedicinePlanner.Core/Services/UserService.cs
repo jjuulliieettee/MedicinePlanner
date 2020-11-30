@@ -35,5 +35,10 @@ namespace MedicinePlanner.Core.Services
         {
             return await _userRepo.GetByEmailAsync(email);
         }
+
+        public async Task<User> UpdateAsync(User user)
+        {
+            return await _userRepo.UpdateAsync(user);
+        }
     }
 }

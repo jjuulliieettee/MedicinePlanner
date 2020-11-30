@@ -17,6 +17,8 @@ namespace MedicinePlanner.Data.Models
 
         public string Photo { get; set; }
 
+        public string Calendar { get; set; }
+
         public virtual ICollection<MedicineSchedule> MedicineSchedules { get; set; }
     }
 }

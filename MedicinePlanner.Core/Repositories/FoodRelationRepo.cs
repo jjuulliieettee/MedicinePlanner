@@ -43,12 +43,16 @@ namespace MedicinePlanner.Core.Repositories
 
         public async Task<FoodRelation> GetByIdAsync(FoodRelationType id)
         {
-            return await _context.FoodRelations.AsNoTracking().FirstOrDefaultAsync(fr => fr.Id == id);
+            return await _context.FoodRelations
+                                 .AsNoTracking()
+                                 .FirstOrDefaultAsync(fr => fr.Id == id);
         }
 
         public async Task<FoodRelation> GetByNameAsync(string name)
         {
-            return await _context.FoodRelations.AsNoTracking().FirstOrDefaultAsync(fr => fr.Name == name);
+            return await _context.FoodRelations
+                                 .AsNoTracking()
+                                 .FirstOrDefaultAsync(fr => fr.Name == name);
         }
     }
 }

@@ -3,13 +3,13 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
+using MedicinePlanner.Core.Configs;
 using MedicinePlanner.Core.Exceptions;
 using MedicinePlanner.Core.Services.Interfaces;
 using MedicinePlanner.Data.Models;
 using MedicinePlanner.WebApi.Auth.Dtos;
 using MedicinePlanner.WebApi.Auth.Extensions;
 using MedicinePlanner.WebApi.Auth.Services.Interfaces;
-using MedicinePlanner.WebApi.Configs;
 using MedicinePlanner.WebApi.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,11 +22,11 @@ namespace MedicinePlanner.WebApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IOptions<GoogleSecretsOptions> _options;
+        private readonly IOptions<GoogleOptions> _options;
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
-        public AuthController(IOptions<GoogleSecretsOptions> options, IUserService userService, 
+        public AuthController(IOptions<GoogleOptions> options, IUserService userService, 
             IAuthService authService, IMapper mapper)
         {
             _options = options;
@@ -48,7 +48,7 @@ namespace MedicinePlanner.WebApi.Controllers
             {
                 payload = await ValidateAsync(googleAuth.IdToken, new ValidationSettings
                 {
-                    Audience = new[] { _options.Value.clientId }
+                    Audience = new[] { _options.Value.Web.clientId }
                 });
 
                 UserReadDto userReadDto = _mapper.Map<UserReadDto>(await _userService.GetByEmailAsync(payload.Email));

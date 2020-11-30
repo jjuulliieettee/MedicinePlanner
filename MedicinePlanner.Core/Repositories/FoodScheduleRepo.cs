@@ -52,32 +52,58 @@ namespace MedicinePlanner.Core.Repositories
 
         public async Task<IEnumerable<FoodSchedule>> GetAllByDateAndUserIdAsync(DateTimeOffset date, Guid userId)
         {
-            return await _context.FoodSchedules.AsNoTracking().Where(ms => ms.MedicineSchedule.UserId == userId)
-                .Where(ms => ms.Date.Date == date.Date).ToListAsync();
+            return await _context.FoodSchedules
+                                 .AsNoTracking()
+                                 .Where(ms => ms.MedicineSchedule.UserId == userId)
+                                 .Where(ms => ms.Date.Date == date.Date)
+                                 .ToListAsync();
         }
 
         public async Task<IEnumerable<FoodSchedule>> GetAllByMedicineScheduleIdAsync(Guid medicineScheduleId)
         {
-            return await _context.FoodSchedules.AsNoTracking().Where(fs => fs.MedicineScheduleId == medicineScheduleId)
-                .OrderBy(fs => fs.Date).ToListAsync();
+            return await _context.FoodSchedules
+                                 .AsNoTracking()
+                                 .Where(fs => fs.MedicineScheduleId == medicineScheduleId)
+                                 .OrderBy(fs => fs.Date)
+                                 .ToListAsync();
         }
 
         public async Task<FoodSchedule> GetByDateAsync(DateTimeOffset date, Guid medicineScheduleId)
         {
-            return await _context.FoodSchedules.AsNoTracking().Where(ms => ms.MedicineScheduleId == medicineScheduleId)
-                .FirstOrDefaultAsync(fs => fs.Date.Date == date.Date);
+            return await _context.FoodSchedules
+                                 .AsNoTracking()
+                                 .Where(ms => ms.MedicineScheduleId == medicineScheduleId)
+                                 .FirstOrDefaultAsync(fs => fs.Date.Date == date.Date);
         }
 
         public async Task<FoodSchedule> GetByIdAsync(Guid id)
         {
-            return await _context.FoodSchedules.AsNoTracking().FirstOrDefaultAsync(fs => fs.Id == id);
+            return await _context.FoodSchedules
+                                 .AsNoTracking()
+                                 .FirstOrDefaultAsync(fs => fs.Id == id);
         }
 
         public async Task<IEnumerable<FoodSchedule>> GetAllByDateRangeAndUserIdAsync(DateTimeOffset[] dates, Guid userId)
         {
             var datesOnly = dates.Select(x => x.Date);
-            return await _context.FoodSchedules.Where(ms => ms.MedicineSchedule.UserId == userId)
-                .Where(ms => datesOnly.Contains(ms.Date.Date)).ToListAsync();
+            return await _context.FoodSchedules
+                                 .Where(ms => ms.MedicineSchedule.UserId == userId)
+                                 .Where(ms => datesOnly.Contains(ms.Date.Date))
+                                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<FoodSchedule>> GetAllByMedicineScheduleIdRangeAsync(MedicineSchedule[] medicineSchedules)
+        {
+            var idsOnly = medicineSchedules.Select(x => x.Id);
+            return await _context.FoodSchedules
+                                 .Include(fs => fs.MedicineSchedule)
+                                 .ThenInclude(ms => ms.Medicine)
+                                 .ThenInclude(med => med.FoodRelation)
+                                 .Include(fs => fs.MedicineSchedule.Medicine.PharmaceuticalForm)
+                                 .AsNoTracking()
+                                 .Where(fs => idsOnly.Contains(fs.MedicineScheduleId))
+                                 .Where(fs => fs.Date.Date >= DateTime.UtcNow.Date)
+                                 .ToListAsync();
         }
     }
 }

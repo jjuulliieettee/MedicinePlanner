@@ -24,12 +24,23 @@ namespace MedicinePlanner.Core.Repositories
 
         public async Task<User> GetByEmailAsync(string email)
         {
-            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Email == email);
+            return await _context.Users
+                                 .AsNoTracking()
+                                 .FirstOrDefaultAsync(user => user.Email == email);
         }
 
         public async Task<User> GetByIdAsync(Guid id)
         {
-            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Id == id);
+            return await _context.Users
+                                 .AsNoTracking()
+                                 .FirstOrDefaultAsync(user => user.Id == id);
+        }
+
+        public async Task<User> UpdateAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return user;
         }
     }
 }

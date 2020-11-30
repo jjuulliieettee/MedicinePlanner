@@ -13,13 +13,14 @@ using Newtonsoft.Json.Serialization;
 using AutoMapper;
 using System;
 using System.Linq;
-using MedicinePlanner.WebApi.Configs;
 using MedicinePlanner.WebApi.Auth.Services.Interfaces;
 using MedicinePlanner.WebApi.Auth.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MedicinePlanner.WebApi.Auth.Configs;
 using System.Text;
+using MedicinePlanner.Core.Configs;
+using MedicinePlanner.Core.Services.GoogleCalendar;
 
 namespace MedicinePlanner.WebApi
 {
@@ -64,9 +65,9 @@ namespace MedicinePlanner.WebApi
                 s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
 
-            services.Configure<GoogleSecretsOptions>(Configuration.GetSection("Google"));
+            services.Configure<GoogleOptions>(Configuration.GetSection("Google"));
 
-            GoogleSecretsOptions googleOptions = Configuration.GetSection("Google").Get<GoogleSecretsOptions>();
+            GoogleOptions googleOptions = Configuration.GetSection("Google").Get<GoogleOptions>();
 
             
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme )
@@ -89,8 +90,8 @@ namespace MedicinePlanner.WebApi
                 })
                 .AddGoogle(options =>
                 {
-                    options.ClientId = googleOptions.clientId;
-                    options.ClientSecret = googleOptions.clientSecret;
+                    options.ClientId = googleOptions.Web.clientId;
+                    options.ClientSecret = googleOptions.Web.clientSecret;
                     options.SaveTokens = true;
                 });
 
@@ -110,6 +111,7 @@ namespace MedicinePlanner.WebApi
             services.AddScoped<IMedicineScheduleService, MedicineScheduleService>();
             services.AddScoped<IFoodScheduleRepo, FoodScheduleRepo>();
             services.AddScoped<IFoodScheduleService, FoodScheduleService>();
+            services.AddScoped<IGoogleCalendarService, GoogleCalendarService>();
 
         }
 

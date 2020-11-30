@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using MedicinePlanner.Core.Exceptions;
+using MedicinePlanner.Core.Services.GoogleCalendar;
 using MedicinePlanner.Core.Services.Interfaces;
 using MedicinePlanner.Data.Models;
 using MedicinePlanner.WebApi.Auth.Extensions;
@@ -19,11 +20,14 @@ namespace MedicinePlanner.WebApi.Controllers
     {
         private readonly IMedicineScheduleService _medicineScheduleService;
         private readonly IFoodScheduleService _foodScheduleService;
+        private readonly IGoogleCalendarService _googleCalendarService;
         private readonly IMapper _mapper;
-        public MedicineSchedulesController(IMapper mapper, IMedicineScheduleService medicineScheduleService, IFoodScheduleService foodScheduleService)
+        public MedicineSchedulesController(IMapper mapper, IMedicineScheduleService medicineScheduleService, 
+            IFoodScheduleService foodScheduleService, IGoogleCalendarService googleCalendarService)
         {
             _medicineScheduleService = medicineScheduleService;
             _foodScheduleService = foodScheduleService;
+            _googleCalendarService = googleCalendarService;
             _mapper = mapper;
         }
 
@@ -56,6 +60,8 @@ namespace MedicinePlanner.WebApi.Controllers
 
                     IEnumerable<MedicineScheduleReadDto> newMedSchedulesDto = _mapper.Map<IEnumerable<MedicineScheduleReadDto>>(medicineSchedules);
 
+                    await _googleCalendarService.SetEvents(userId);
+
                     return CreatedAtAction("GetAll", newMedSchedulesDto);
                 }
                 catch (ApiException ex)
@@ -77,6 +83,9 @@ namespace MedicinePlanner.WebApi.Controllers
                     Guid userId = User.GetUserId();
                     medicineSchedule.UserId = userId;
                     await _medicineScheduleService.EditAsync(_mapper.Map<MedicineSchedule>(medicineSchedule));
+
+                    await _googleCalendarService.SetEvents(userId);
+
                     return Ok(new { message = "Success" });
                 }
                 catch (ApiException ex)
@@ -93,6 +102,10 @@ namespace MedicinePlanner.WebApi.Controllers
             try
             {
                 await _medicineScheduleService.DeleteAsync(id);
+
+                Guid userId = User.GetUserId();
+                await _googleCalendarService.SetEvents(userId);
+
                 return Ok(new { message = "Success" });
             }
             catch (ApiException ex)
@@ -128,6 +141,8 @@ namespace MedicinePlanner.WebApi.Controllers
 
                 await _foodScheduleService.EditAllBasedOnFoodScheduleAsync(id, userId);
 
+                await _googleCalendarService.SetEvents(userId);
+
                 return Ok(new { message = "Success"});
             }
             catch (ApiException ex)
@@ -149,6 +164,8 @@ namespace MedicinePlanner.WebApi.Controllers
 
                     await _foodScheduleService.EditAsync(foodSchedule, userId);
 
+                    await _googleCalendarService.SetEvents(userId);
+
                     return Ok(new { message = "Success" });
                 }
                 catch (ApiException ex)
@@ -165,6 +182,10 @@ namespace MedicinePlanner.WebApi.Controllers
             try
             {
                 await _foodScheduleService.DeleteAsync(id);
+
+                Guid userId = User.GetUserId();
+                await _googleCalendarService.SetEvents(userId);
+
                 return Ok(new { message = "Success" });
             }
             catch (ApiException ex)

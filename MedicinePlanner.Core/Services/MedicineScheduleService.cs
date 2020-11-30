@@ -89,7 +89,7 @@ namespace MedicinePlanner.Core.Services
 
         public async Task<IEnumerable<MedicineSchedule>> GetAllByUserIdAsync(Guid userId)
         {
-            return await _medicineScheduleRepo.GetAllByUserIdAsync(userId);
+            return (await _medicineScheduleRepo.GetAllByUserIdAsync(userId)).Where(ms => ms.EndDate.Date >= DateTime.UtcNow.Date);
         }
 
         public async Task<MedicineSchedule> GetByIdAsync(Guid id)

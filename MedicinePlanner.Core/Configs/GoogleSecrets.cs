@@ -1,6 +1,6 @@
-﻿namespace MedicinePlanner.WebApi.Configs
+﻿namespace MedicinePlanner.Core.Configs
 {
-    public class GoogleSecretsOptions
+    public class GoogleSecrets
     {
         public string clientId { get; set; }
         public string clientSecret { get; set; }

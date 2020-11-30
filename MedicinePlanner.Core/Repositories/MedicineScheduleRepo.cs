@@ -39,37 +39,63 @@ namespace MedicinePlanner.Core.Repositories
 
         public async Task<IEnumerable<MedicineSchedule>> GetAllByMedicineNameAndUserIdAsync(string medicineName, Guid userId)
         {
-            return await _context.MedicineSchedules.Include(med => med.Medicine).Include(fr => fr.Medicine.FoodRelation)
-                .Include(pf => pf.Medicine.PharmaceuticalForm).Include(user => user.User).Include(fs => fs.FoodSchedules)
-                .Where(ms => ms.UserId == userId).Where(ms => medicineName == null || ms.Medicine.Name.Contains(medicineName))
-                .OrderByDescending(ms => ms.StartDate).ToListAsync();
+            return await _context.MedicineSchedules
+                                 .Include(med => med.Medicine)
+                                 .Include(fr => fr.Medicine.FoodRelation)
+                                 .Include(pf => pf.Medicine.PharmaceuticalForm)
+                                 .Include(user => user.User)
+                                 .Include(fs => fs.FoodSchedules)
+                                 .Where(ms => ms.UserId == userId)
+                                 .Where(ms => medicineName == null || ms.Medicine.Name.Contains(medicineName))
+                                 .OrderByDescending(ms => ms.StartDate)
+                                 .ToListAsync();
         }
 
         public async Task<IEnumerable<MedicineSchedule>> GetAllByUserIdAsync(Guid userId)
         {
-            return await _context.MedicineSchedules.Include(med => med.Medicine).Include(fr => fr.Medicine.FoodRelation)
-                .Include(pf => pf.Medicine.PharmaceuticalForm).Include(user => user.User)
-                .Include(fs => fs.FoodSchedules).Where(ms => ms.UserId == userId).OrderByDescending(ms => ms.StartDate).ToListAsync();
+            return await _context.MedicineSchedules
+                                 .Include(med => med.Medicine)
+                                 .Include(fr => fr.Medicine.FoodRelation)
+                                 .Include(pf => pf.Medicine.PharmaceuticalForm)
+                                 .Include(user => user.User)
+                                 .Include(fs => fs.FoodSchedules)
+                                 .Where(ms => ms.UserId == userId)
+                                 .OrderByDescending(ms => ms.StartDate)
+                                 .ToListAsync();
         }
 
         public async Task<IEnumerable<MedicineSchedule>> GetAllByUserIdAndMedicineIdAsync(Guid userId, Guid medicineId)
         {
-            return await _context.MedicineSchedules.Include(med => med.Medicine).Include(fr => fr.Medicine.FoodRelation)
-                .Include(pf => pf.Medicine.PharmaceuticalForm).Include(user => user.User).Include(fs => fs.FoodSchedules)
-                .Where(ms => ms.UserId == userId).Where(ms => ms.MedicineId == medicineId).OrderByDescending(ms => ms.StartDate).ToListAsync();
+            return await _context.MedicineSchedules
+                                 .Include(med => med.Medicine)
+                                 .Include(fr => fr.Medicine.FoodRelation)
+                                 .Include(pf => pf.Medicine.PharmaceuticalForm)
+                                 .Include(user => user.User)
+                                 .Include(fs => fs.FoodSchedules)
+                                 .Where(ms => ms.UserId == userId)
+                                 .Where(ms => ms.MedicineId == medicineId)
+                                 .OrderByDescending(ms => ms.StartDate)
+                                 .ToListAsync();
         }
 
         public async Task<IEnumerable<MedicineSchedule>> GetAllByMedicineIdAsync(Guid medicineId)
         {
-            return await _context.MedicineSchedules.Where(ms => ms.MedicineId == medicineId).ToListAsync();
+            return await _context.MedicineSchedules
+                                 .Where(ms => ms.MedicineId == medicineId)
+                                 .ToListAsync();
         }
 
         public async Task<MedicineSchedule> GetByIdAsync(Guid id)
         {
             _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            return await _context.MedicineSchedules.AsNoTracking().Include(med => med.Medicine).Include(fr => fr.Medicine.FoodRelation)
-            .Include(pf => pf.Medicine.PharmaceuticalForm).Include(user => user.User)
-            .Include(fs => fs.FoodSchedules).FirstOrDefaultAsync(ms => ms.Id == id);
+            return await _context.MedicineSchedules
+                                 .AsNoTracking()
+                                 .Include(med => med.Medicine)
+                                 .Include(fr => fr.Medicine.FoodRelation)
+                                 .Include(pf => pf.Medicine.PharmaceuticalForm)
+                                 .Include(user => user.User)
+                                 .Include(fs => fs.FoodSchedules)
+                                 .FirstOrDefaultAsync(ms => ms.Id == id);
         }
     }
 }

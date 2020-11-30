@@ -43,12 +43,16 @@ namespace MedicinePlanner.Core.Repositories
 
         public async Task<PharmaceuticalForm> GetByIdAsync(PharmaceuticalFormType id)
         {
-            return await _context.PharmaceuticalForms.AsNoTracking().FirstOrDefaultAsync(pf => pf.Id == id);
+            return await _context.PharmaceuticalForms
+                                 .AsNoTracking()
+                                 .FirstOrDefaultAsync(pf => pf.Id == id);
         }
 
         public async Task<PharmaceuticalForm> GetByNameAsync(string name)
         {
-            return await _context.PharmaceuticalForms.AsNoTracking().FirstOrDefaultAsync(pf => pf.Name == name);
+            return await _context.PharmaceuticalForms
+                                 .AsNoTracking()
+                                 .FirstOrDefaultAsync(pf => pf.Name == name);
         }
     }
 }
