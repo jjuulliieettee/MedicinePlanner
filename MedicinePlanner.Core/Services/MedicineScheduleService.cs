@@ -21,8 +21,7 @@ namespace MedicinePlanner.Core.Services
 
         public async Task<IEnumerable<MedicineSchedule>> AddAsync(IEnumerable<MedicineSchedule> medicineSchedules, Guid userId)
         {
-            IEnumerable<MedicineSchedule> existingMedicineSchedules = (await _medicineScheduleRepo.GetAllByUserIdAsync(userId))
-                .Where(ms => ms.EndDate.Date >= DateTime.UtcNow.Date);
+            IEnumerable<MedicineSchedule> existingMedicineSchedules = await _medicineScheduleRepo.GetAllByUserIdAsync(userId);
 
             foreach (MedicineSchedule medSchedNew in medicineSchedules)
             {
@@ -61,9 +60,9 @@ namespace MedicinePlanner.Core.Services
 
             medicineSchedule.MedicineId = medicineScheduleOld.MedicineId;
 
-            IEnumerable<MedicineSchedule> existingMedicineSchedules = (await _medicineScheduleRepo.GetAllByUserIdAndMedicineIdAsync
-                (medicineSchedule.UserId, medicineSchedule.MedicineId))
-                .Where(ms => ms.EndDate.Date >= DateTime.UtcNow.Date).Where(ms => ms.Id != medicineSchedule.Id);
+            IEnumerable<MedicineSchedule> existingMedicineSchedules =
+                (await _medicineScheduleRepo.GetAllByUserIdAndMedicineIdAsync(medicineSchedule.UserId, medicineSchedule.MedicineId))
+                .Where(ms => ms.Id != medicineSchedule.Id);
 
             if (existingMedicineSchedules.Any(ms => DoesMedicineScheduleOverlap(medicineSchedule, ms)))
             {
@@ -78,8 +77,7 @@ namespace MedicinePlanner.Core.Services
 
         public async Task<IEnumerable<MedicineSchedule>> GetAllByMedicineAndUserIdAsync(string medicineName, Guid userId)
         {
-            return (await _medicineScheduleRepo.GetAllByMedicineNameAndUserIdAsync(medicineName, userId))
-                .Where(ms => ms.EndDate.Date >= DateTime.UtcNow.Date);
+            return await _medicineScheduleRepo.GetAllByMedicineNameAndUserIdAsync(medicineName, userId);
         }
 
         public async Task<IEnumerable<MedicineSchedule>> GetAllByMedicineIdAsync(Guid medicineId)
@@ -89,7 +87,7 @@ namespace MedicinePlanner.Core.Services
 
         public async Task<IEnumerable<MedicineSchedule>> GetAllByUserIdAsync(Guid userId)
         {
-            return (await _medicineScheduleRepo.GetAllByUserIdAsync(userId)).Where(ms => ms.EndDate.Date >= DateTime.UtcNow.Date);
+            return await _medicineScheduleRepo.GetAllByUserIdAsync(userId);
         }
 
         public async Task<MedicineSchedule> GetByIdAsync(Guid id)

@@ -16,6 +16,5 @@ namespace MedicinePlanner.Core.Services.Interfaces
         Task EditAllBasedOnFoodScheduleAsync(Guid foodScheduleId, Guid userId);
         Task EditAllBasedOnMedicineScheduleAsync(MedicineSchedule medicineSchedule);
         Task DeleteAsync(Guid id);
-        Task DeleteAllAsync(Guid medicineScheduleId);
     }
 }

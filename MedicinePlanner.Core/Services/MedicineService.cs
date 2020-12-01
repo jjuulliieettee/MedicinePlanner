@@ -77,8 +77,7 @@ namespace MedicinePlanner.Core.Services
 
         private bool IsMedicineEqual(Medicine med1, Medicine med2)
         {
-            return med1.Name.ToLower() == med2.Name.ToLower()
-                && med1.PharmaceuticalFormId == med2.PharmaceuticalFormId
+            return med1.PharmaceuticalFormId == med2.PharmaceuticalFormId
                 && med1.Dosage == med2.Dosage
                 && med1.NumberOfTakes == med2.NumberOfTakes;
         }

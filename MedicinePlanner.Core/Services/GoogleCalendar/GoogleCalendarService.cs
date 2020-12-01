@@ -3,15 +3,12 @@ using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Requests;
 using Google.Apis.Services;
-using MedicinePlanner.Core.Configs;
 using MedicinePlanner.Core.Services.Interfaces;
 using MedicinePlanner.Core.Shared;
 using MedicinePlanner.Data.Models;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using MedicinePlanner.Data.Enums;
 
@@ -19,47 +16,44 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
 {
     public class GoogleCalendarService : IGoogleCalendarService
     {
-        private DateTimeOffset TimeOfLastMeal = new DateTimeOffset();
+        private DateTimeOffset TimeOfLastMeal;
 
-        private readonly IOptions<GoogleOptions> _options;
         private readonly IUserService _userService;
         private readonly IMedicineScheduleService _medicineScheduleService;
         private readonly IFoodScheduleService _foodScheduleService;
-        public GoogleCalendarService(IOptions<GoogleOptions> options, IUserService userService, IMedicineScheduleService medicineScheduleService,
+        public GoogleCalendarService(IUserService userService, IMedicineScheduleService medicineScheduleService,
            IFoodScheduleService foodScheduleService)
         {
-            _options = options;
             _userService = userService;
             _medicineScheduleService = medicineScheduleService;
             _foodScheduleService = foodScheduleService;
         }
 
-        public async Task SetEvents(Guid userId)
+        public async Task SetEvents(Guid userId, string accessToken)
         {
-            //initialize
-            string[] Scopes = { CalendarService.Scope.Calendar, CalendarService.Scope.CalendarEvents };
             string ApplicationName = "MedicinePlanner";
-
-            ClientSecrets clientSecrets = new ClientSecrets
-            {
-                ClientId = _options.Value.Calendar.clientId,
-                ClientSecret = _options.Value.Calendar.clientSecret
-            };
-            UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(clientSecrets, Scopes, "user", CancellationToken.None).Result;
+            
+            GoogleCredential cred = GoogleCredential.FromAccessToken(accessToken);
 
             //new calendar service
             CalendarService service = new CalendarService(new BaseClientService.Initializer()
             {
-                HttpClientInitializer = credential,
+                HttpClientInitializer = cred,
                 ApplicationName = ApplicationName,
             });
-            
+
             //get user and clear their MP calendar
             User user = await _userService.GetByIdAsync(userId);
-            
             if (user.Calendar != null)
             {
-                await DeleteCalendar(service, user.Calendar);
+                try
+                {
+                    await DeleteCalendar(service, user.Calendar);
+                }
+                catch (Exception ex)
+                {
+                    string message = ex.Message;
+                }
             }
             user = await UpdateUserCalendar(user, service);
 
@@ -86,7 +80,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
         private async Task AddEvents(CalendarService service, string calendarId, List<Day> days)
         {
             BatchRequest req = new BatchRequest(service);
-            
+
             foreach (Day day in days)
             {
                 foreach (Take take in day.Takes)
@@ -106,7 +100,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
                                 Reminders = new Event.RemindersData()
                                 {
                                     UseDefault = false,
-                                    Overrides = new EventReminder[]
+                                    Overrides = new []
                                     {
                                         new EventReminder() { Method = "popup", Minutes = 5 }
                                     }
@@ -114,17 +108,15 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
                             }, calendarId),
                         (content, error, i, message) => { });
                 }
-                
             }
-
             await req.ExecuteAsync();
         }
-        
+
         private async Task DeleteCalendar(CalendarService service, string calendarId)
         {
             await service.Calendars.Delete(calendarId).ExecuteAsync();
         }
-        
+
         private Day GenerateDay(List<FoodSchedule> foodSchedules)
         {
             Day day = new Day
@@ -144,12 +136,12 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
             foreach (FoodSchedule foodSched in foodSchedules)
             {
                 Medicine med = foodSched.MedicineSchedule.Medicine;
-                
+
                 List<Take> medicineTakes = GenerateMedicineTakes(med, mealsTakes, foodSched);
                 allTakes.AddRange(medicineTakes);
             }
             allTakes.AddRange(mealsTakes);
-            
+
             return allTakes;
         }
 
@@ -190,10 +182,10 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
                         });
                         return medicineTakes;
                 }
-
             }
 
             TimeOfLastMeal = SetTimeOfLastMeal(foodSchedule);
+
             double intervalBetweenTakes = GetInterval(TimeOfLastMeal, foodSchedule.TimeOfFirstMeal,
                 medicine.NumberOfTakes);
 
@@ -224,7 +216,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
             {
                 Take firstMeal = mealsTakes.Find(meal => meal.TimeFrom.Hour == foodSchedule.TimeOfFirstMeal.Hour);
                 firstMeal.Description += "; " + GetDescription(medicine);
-                
+
                 DateTimeOffset timeToAdd = firstMeal.TimeFrom;
                 for (int i = 1; i < medicine.NumberOfTakes; i++)
                 {
@@ -291,7 +283,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
         {
             TimeOfLastMeal = SetTimeOfLastMeal(foodSchedule);
 
-            List <Take> mealsForDay = new List<Take>()
+            List<Take> mealsForDay = new List<Take>()
             {
                 new Take()
                 {
@@ -319,14 +311,14 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
             return mealsForDay;
         }
 
-        private Take GetNearestMeal(List<Take> meals, DateTimeOffset medicineTake)
+        private Take GetNearestMeal(List<Take> meals, DateTimeOffset medicineTakeTime)
         {
             Take nearestMeal = meals.First();
 
             long diff = DateTime.MaxValue.Ticks;
             foreach (Take meal in meals)
             {
-                long timeDiff = Math.Abs(meal.TimeFrom.Ticks - medicineTake.Ticks);
+                long timeDiff = Math.Abs(meal.TimeFrom.Ticks - medicineTakeTime.Ticks);
                 if (diff > timeDiff)
                 {
                     diff = timeDiff;
@@ -336,7 +328,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
 
             return nearestMeal;
         }
-        
+
         private string GetDescription(Medicine medicine)
         {
             return $"Take {medicine.Name}, {medicine.PharmaceuticalForm.Name}, " +
@@ -355,7 +347,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
 
             return distinctFoodSchedules;
         }
-       
+
         private async Task<User> UpdateUserCalendar(User user, CalendarService service)
         {
             Calendar primaryCalendar = await service.Calendars.Get("primary").ExecuteAsync();

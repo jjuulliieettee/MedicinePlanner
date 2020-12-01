@@ -47,7 +47,8 @@ namespace MedicinePlanner.Core.Repositories
                                  .Include(fs => fs.FoodSchedules)
                                  .Where(ms => ms.UserId == userId)
                                  .Where(ms => medicineName == null || ms.Medicine.Name.Contains(medicineName))
-                                 .OrderByDescending(ms => ms.StartDate)
+                                 .Where(ms => ms.EndDate.Date >= DateTime.UtcNow.Date)
+                                 .OrderBy(ms => ms.StartDate)
                                  .ToListAsync();
         }
 
@@ -60,7 +61,8 @@ namespace MedicinePlanner.Core.Repositories
                                  .Include(user => user.User)
                                  .Include(fs => fs.FoodSchedules)
                                  .Where(ms => ms.UserId == userId)
-                                 .OrderByDescending(ms => ms.StartDate)
+                                 .Where(ms => ms.EndDate.Date >= DateTime.UtcNow.Date)
+                                 .OrderBy(ms => ms.StartDate)
                                  .ToListAsync();
         }
 
@@ -74,7 +76,8 @@ namespace MedicinePlanner.Core.Repositories
                                  .Include(fs => fs.FoodSchedules)
                                  .Where(ms => ms.UserId == userId)
                                  .Where(ms => ms.MedicineId == medicineId)
-                                 .OrderByDescending(ms => ms.StartDate)
+                                 .Where(ms => ms.EndDate.Date >= DateTime.UtcNow.Date)
+                                 .OrderBy(ms => ms.StartDate)
                                  .ToListAsync();
         }
 
@@ -82,6 +85,7 @@ namespace MedicinePlanner.Core.Repositories
         {
             return await _context.MedicineSchedules
                                  .Where(ms => ms.MedicineId == medicineId)
+                                 .Where(ms => ms.EndDate.Date >= DateTime.UtcNow.Date)
                                  .ToListAsync();
         }
 
@@ -90,11 +94,10 @@ namespace MedicinePlanner.Core.Repositories
             _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             return await _context.MedicineSchedules
                                  .AsNoTracking()
-                                 .Include(med => med.Medicine)
-                                 .Include(fr => fr.Medicine.FoodRelation)
-                                 .Include(pf => pf.Medicine.PharmaceuticalForm)
-                                 .Include(user => user.User)
-                                 .Include(fs => fs.FoodSchedules)
+                                 .Include(ms => ms.Medicine)
+                                 .ThenInclude(med => med.FoodRelation)
+                                 .Include(ms => ms.Medicine.PharmaceuticalForm)
+                                 .Include(ms => ms.FoodSchedules)
                                  .FirstOrDefaultAsync(ms => ms.Id == id);
         }
     }

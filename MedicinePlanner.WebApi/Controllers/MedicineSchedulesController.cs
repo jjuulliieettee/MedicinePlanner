@@ -45,7 +45,8 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<MedicineScheduleReadDto>>> Post([FromBody] FoodScheduleAddDto foodAndMedicineSchedules)
+        public async Task<ActionResult<IEnumerable<MedicineScheduleReadDto>>> Post([FromBody] FoodScheduleAddDto foodAndMedicineSchedules, 
+            [FromHeader(Name = "GoogleToken")] string accessToken)
         {
             if (ModelState.IsValid)
             {
@@ -60,7 +61,10 @@ namespace MedicinePlanner.WebApi.Controllers
 
                     IEnumerable<MedicineScheduleReadDto> newMedSchedulesDto = _mapper.Map<IEnumerable<MedicineScheduleReadDto>>(medicineSchedules);
 
-                    await _googleCalendarService.SetEvents(userId);
+                    if (!string.IsNullOrEmpty(accessToken))
+                    {
+                        await _googleCalendarService.SetEvents(userId, accessToken);
+                    }
 
                     return CreatedAtAction("GetAll", newMedSchedulesDto);
                 }
@@ -73,7 +77,8 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] MedicineScheduleEditDto medicineSchedule)
+        public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] MedicineScheduleEditDto medicineSchedule,
+            [FromHeader(Name = "GoogleToken")] string accessToken)
         {
             medicineSchedule.Id = id;
             if (ModelState.IsValid)
@@ -84,7 +89,10 @@ namespace MedicinePlanner.WebApi.Controllers
                     medicineSchedule.UserId = userId;
                     await _medicineScheduleService.EditAsync(_mapper.Map<MedicineSchedule>(medicineSchedule));
 
-                    await _googleCalendarService.SetEvents(userId);
+                    if (!string.IsNullOrEmpty(accessToken))
+                    {
+                        await _googleCalendarService.SetEvents(userId, accessToken);
+                    }
 
                     return Ok(new { message = "Success" });
                 }
@@ -97,14 +105,18 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id, [FromHeader(Name = "GoogleToken")] string accessToken)
         {
             try
             {
                 await _medicineScheduleService.DeleteAsync(id);
 
                 Guid userId = User.GetUserId();
-                await _googleCalendarService.SetEvents(userId);
+
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    await _googleCalendarService.SetEvents(userId, accessToken);
+                }
 
                 return Ok(new { message = "Success" });
             }
@@ -112,16 +124,22 @@ namespace MedicinePlanner.WebApi.Controllers
             {
                 return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
             }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = true, message = ex.Message });
+            }
         }
 
         [HttpGet("GetFoodSchedules/{medicineScheduleId}")]
         public async Task<ActionResult<IEnumerable<FoodScheduleReadDto>>> GetAllFoodSchedules([FromRoute] Guid medicineScheduleId)
         {
-            return Ok(_mapper.Map<IEnumerable<FoodScheduleReadDto>>(await _foodScheduleService.GetAllByMedicineScheduleIdAsync(medicineScheduleId)));
+            return Ok(_mapper.Map<IEnumerable<FoodScheduleReadDto>>(
+                await _foodScheduleService.GetAllByMedicineScheduleIdAsync(medicineScheduleId)));
         }
 
         [HttpGet("{medicineScheduleId}/SearchFoodSchedule")]
-        public async Task<ActionResult<FoodScheduleReadDto>> SearchFoodSchedule([FromQuery] DateTimeOffset date, [FromRoute] Guid medicineScheduleId)
+        public async Task<ActionResult<FoodScheduleReadDto>> SearchFoodSchedule([FromQuery] DateTimeOffset date, 
+            [FromRoute] Guid medicineScheduleId)
         {
             return Ok(_mapper.Map<FoodScheduleReadDto>(await _foodScheduleService.GetByDateAsync(date, medicineScheduleId)));
         }
@@ -133,7 +151,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPost("FoodSchedules/MakeDefault/{id}")]
-        public async Task<ActionResult> MakeDefault([FromRoute] Guid id)
+        public async Task<ActionResult> MakeDefault([FromRoute] Guid id, [FromHeader(Name = "GoogleToken")] string accessToken)
         {            
             try
             {
@@ -141,7 +159,10 @@ namespace MedicinePlanner.WebApi.Controllers
 
                 await _foodScheduleService.EditAllBasedOnFoodScheduleAsync(id, userId);
 
-                await _googleCalendarService.SetEvents(userId);
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    await _googleCalendarService.SetEvents(userId, accessToken);
+                }
 
                 return Ok(new { message = "Success"});
             }
@@ -152,7 +173,8 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpPut("FoodSchedules/{id}")]
-        public async Task<ActionResult> EditFoodSchedule([FromRoute] Guid id, [FromBody] FoodScheduleEditDto foodScheduleEditDto)
+        public async Task<ActionResult> EditFoodSchedule([FromRoute] Guid id, [FromBody]FoodScheduleEditDto foodScheduleEditDto,
+            [FromHeader(Name = "GoogleToken")] string accessToken)
         {
             if (ModelState.IsValid)
             {
@@ -164,7 +186,10 @@ namespace MedicinePlanner.WebApi.Controllers
 
                     await _foodScheduleService.EditAsync(foodSchedule, userId);
 
-                    await _googleCalendarService.SetEvents(userId);
+                    if (!string.IsNullOrEmpty(accessToken))
+                    {
+                        await _googleCalendarService.SetEvents(userId, accessToken);
+                    }
 
                     return Ok(new { message = "Success" });
                 }
@@ -177,14 +202,18 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpDelete("FoodSchedules/{id}")]
-        public async Task<IActionResult> DeleteFoodSchedule([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteFoodSchedule([FromRoute] Guid id, [FromHeader(Name = "GoogleToken")] string accessToken)
         {
             try
             {
                 await _foodScheduleService.DeleteAsync(id);
 
                 Guid userId = User.GetUserId();
-                await _googleCalendarService.SetEvents(userId);
+
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    await _googleCalendarService.SetEvents(userId, accessToken);
+                }
 
                 return Ok(new { message = "Success" });
             }

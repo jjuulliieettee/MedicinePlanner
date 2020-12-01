@@ -24,9 +24,14 @@ namespace MedicinePlanner.Core.Services
             List<DateTimeOffset> dates = new List<DateTimeOffset>();
             foreach (MedicineSchedule medSched in medicineSchedules)
             {
-                DateTimeOffset currentDate = new DateTimeOffset(medSched.StartDate.Year, medSched.StartDate.Month, medSched.StartDate.Day,
-                    foodSchedule.TimeOfFirstMeal.Hour, foodSchedule.TimeOfFirstMeal.Minute, foodSchedule.TimeOfFirstMeal.Second,
-                    new TimeSpan(0, 0, 0));
+                DateTimeOffset currentDate = new DateTimeOffset(
+                    medSched.StartDate.Year, 
+                    medSched.StartDate.Month,
+                    medSched.StartDate.Day,
+                    foodSchedule.TimeOfFirstMeal.Hour, 
+                    foodSchedule.TimeOfFirstMeal.Minute,
+                    foodSchedule.TimeOfFirstMeal.Second,
+                    foodSchedule.TimeOfFirstMeal.Offset);
                 for (DateTimeOffset date = currentDate; date.Date <= medSched.EndDate.Date; date = date.AddDays(1))
                 {
                     foodSchedules.Add(new FoodSchedule
@@ -55,18 +60,6 @@ namespace MedicinePlanner.Core.Services
             await _foodScheduleRepo.DeleteAsync(foodSchedule);
         }
 
-        public async Task DeleteAllAsync(Guid medicineScheduleId)
-        {
-            IEnumerable<FoodSchedule> foodSchedules = await _foodScheduleRepo.GetAllByMedicineScheduleIdAsync(medicineScheduleId);
-
-            if (!foodSchedules.Any())
-            {
-                throw new ApiException("Food schedules not found!");
-            }
-
-            await _foodScheduleRepo.DeleteAllAsync(foodSchedules);
-        }
-
         public async Task<FoodSchedule> EditAsync(FoodSchedule foodSchedule, Guid userId)
         {
             FoodSchedule foodScheduleOld = await _foodScheduleRepo.GetByIdAsync(foodSchedule.Id);
@@ -76,6 +69,15 @@ namespace MedicinePlanner.Core.Services
             }
 
             foodSchedule.Date = foodScheduleOld.Date;
+            foodSchedule.TimeOfFirstMeal = new DateTimeOffset(
+                foodScheduleOld.Date.Year,
+                foodScheduleOld.Date.Month,
+                foodScheduleOld.Date.Day,
+                foodSchedule.TimeOfFirstMeal.Hour,
+                foodSchedule.TimeOfFirstMeal.Minute,
+                foodSchedule.TimeOfFirstMeal.Second,
+                foodSchedule.TimeOfFirstMeal.Offset);
+            
             foodSchedule.MedicineScheduleId = foodScheduleOld.MedicineScheduleId;
 
             List<DateTimeOffset> dates = new List<DateTimeOffset>() { foodSchedule.Date };
@@ -134,7 +136,8 @@ namespace MedicinePlanner.Core.Services
 
         public async Task<IEnumerable<FoodSchedule>> GetAllByMedicineScheduleIdAsync(Guid medicineScheduleId)
         {
-            return (await _foodScheduleRepo.GetAllByMedicineScheduleIdAsync(medicineScheduleId)).Where(fs => fs.Date.Date >= DateTime.UtcNow.Date);
+            return (await _foodScheduleRepo.GetAllByMedicineScheduleIdAsync(medicineScheduleId))
+                .Where(fs => fs.Date.Date >= DateTime.UtcNow.Date);
         }
 
         public async Task<FoodSchedule> GetByDateAsync(DateTimeOffset date, Guid medicineScheduleId)
@@ -155,9 +158,14 @@ namespace MedicinePlanner.Core.Services
                 .Where(foodSched => staticFoodSchedules.All(fs => fs.Id != foodSched.Id));
             foreach (FoodSchedule foodSched in foodSchedules)
             {
-                foodSched.TimeOfFirstMeal = new DateTimeOffset(foodSched.TimeOfFirstMeal.Year, foodSched.TimeOfFirstMeal.Month,
-                    foodSched.TimeOfFirstMeal.Day, foodSchedule.TimeOfFirstMeal.Hour, foodSchedule.TimeOfFirstMeal.Minute,
-                    foodSchedule.TimeOfFirstMeal.Second, new TimeSpan(0, 0, 0));
+                foodSched.TimeOfFirstMeal = new DateTimeOffset(
+                    foodSched.Date.Year, 
+                    foodSched.Date.Month,
+                    foodSched.Date.Day, 
+                    foodSchedule.TimeOfFirstMeal.Hour, 
+                    foodSchedule.TimeOfFirstMeal.Minute,
+                    foodSchedule.TimeOfFirstMeal.Second, 
+                    foodSchedule.TimeOfFirstMeal.Offset);
 
                 foodSched.NumberOfMeals = foodSchedule.NumberOfMeals;
             }
