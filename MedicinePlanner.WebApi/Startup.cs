@@ -12,7 +12,6 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using AutoMapper;
 using System;
-using System.Globalization;
 using System.Linq;
 using MedicinePlanner.WebApi.Auth.Services.Interfaces;
 using MedicinePlanner.WebApi.Auth.Services;
@@ -23,8 +22,7 @@ using System.Text;
 using MedicinePlanner.Core.Configs;
 using MedicinePlanner.Core.Exceptions;
 using MedicinePlanner.Core.Services.GoogleCalendar;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 
 namespace MedicinePlanner.WebApi
 {
@@ -75,6 +73,15 @@ namespace MedicinePlanner.WebApi
                     {
                         s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "MedicinePlanner API"
+                });
+            });
 
             services.Configure<GoogleOptions>(Configuration.GetSection("Google"));
 
@@ -141,6 +148,13 @@ namespace MedicinePlanner.WebApi
                                                                       .AddSupportedUICultures(supportedCultures);
 
             app.UseRequestLocalization(localizationOptions);
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MedicinePlanner V1");
+            });
+
 
             app.UseRouting();
 

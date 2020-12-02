@@ -34,6 +34,7 @@ namespace MedicinePlanner.WebApi.Controllers
             _mapper = mapper;
         }
 
+        [NonAction]
         public HttpResponseMessage Options()
         {
             return new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
