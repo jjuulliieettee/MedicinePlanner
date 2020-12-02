@@ -2,7 +2,7 @@
 {
     public class GoogleSecrets
     {
-        public string clientId { get; set; }
-        public string clientSecret { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
     }
 }

@@ -38,7 +38,7 @@ namespace MedicinePlanner.WebApi.Controllers
 
             if (medicine == null)
             {
-                return NotFound();
+                throw new ApiException("Medicine not found!");
             }
 
             return Ok(medicine);
@@ -48,37 +48,15 @@ namespace MedicinePlanner.WebApi.Controllers
         public async Task<IActionResult> Put([FromRoute]Guid id, [FromBody]MedicineEditDto medicineEditDto)
         {
             medicineEditDto.Id = id;
-            if (ModelState.IsValid)
-            {
-                try
-                {                    
-                    await _medicineService.EditAsync(_mapper.Map<Medicine>(medicineEditDto));
-                    return Ok(new { message = "Success" });
-                }
-                catch (ApiException ex)
-                {
-                    return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
-                }
-            }
-            return BadRequest();
+            await _medicineService.EditAsync(_mapper.Map<Medicine>(medicineEditDto));
+            return Ok(new { message = "Success" });
         }
 
         [HttpPost]
         public async Task<ActionResult<MedicineReadDto>> Post([FromBody]MedicineCreateDto medicine)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    MedicineReadDto newMedicine = _mapper.Map<MedicineReadDto>(await _medicineService.AddAsync(_mapper.Map<Medicine>(medicine)));
-                    return CreatedAtAction("Get", new { id = newMedicine.Id }, newMedicine);
-                }
-                catch(ApiException ex)
-                {
-                    return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
-                }
-            }
-            return BadRequest(); 
+            MedicineReadDto newMedicine = _mapper.Map<MedicineReadDto>(await _medicineService.AddAsync(_mapper.Map<Medicine>(medicine)));
+            return CreatedAtAction("Get", new { id = newMedicine.Id }, newMedicine);
         }
 
         //[HttpDelete("{id}")]

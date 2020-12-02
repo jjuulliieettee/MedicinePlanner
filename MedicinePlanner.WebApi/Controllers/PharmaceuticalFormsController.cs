@@ -39,7 +39,7 @@ namespace MedicinePlanner.WebApi.Controllers
 
             if (pharmaceuticalForm == null)
             {
-                return NotFound();
+                throw new ApiException("Pharmaceutical form not found!");
             }
 
             return Ok(pharmaceuticalForm);
@@ -49,51 +49,24 @@ namespace MedicinePlanner.WebApi.Controllers
         public async Task<IActionResult> Put([FromRoute] PharmaceuticalFormType id, [FromBody]PharmaceuticalFormDto pharmaceuticalForm)
         {
             pharmaceuticalForm.Id = id;
-            try
-            {
-                return Ok(_mapper.Map<PharmaceuticalFormDto>(
-                    await _pharmaceuticalFormService.EditAsync(_mapper.Map<PharmaceuticalForm>(pharmaceuticalForm))
-                    ));
-            }
-            catch (ApiException ex)
-            {
-                return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
-            }
+            await _pharmaceuticalFormService.EditAsync(_mapper.Map<PharmaceuticalForm>(pharmaceuticalForm));
+            return Ok(new { message = "Success" });
         }
 
         [HttpPost]
         public async Task<ActionResult<PharmaceuticalFormDto>> Post([FromBody]PharmaceuticalFormCreateDto pharmaceuticalForm)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    PharmaceuticalFormDto newPharmaceuticalForm = _mapper.Map<PharmaceuticalFormDto>(
-                        await _pharmaceuticalFormService.AddAsync(_mapper.Map<PharmaceuticalForm>(pharmaceuticalForm))
-                        );
-                    return CreatedAtAction("Get", new { id = newPharmaceuticalForm.Id }, newPharmaceuticalForm);
-                }
-                catch (ApiException ex)
-                {
-                    return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
-                }
-            }
-            return BadRequest();
+            PharmaceuticalFormDto newPharmaceuticalForm = _mapper.Map<PharmaceuticalFormDto>(
+                await _pharmaceuticalFormService.AddAsync(_mapper.Map<PharmaceuticalForm>(pharmaceuticalForm))
+            );
+            return CreatedAtAction("Get", new { id = newPharmaceuticalForm.Id }, newPharmaceuticalForm);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete([FromRoute] PharmaceuticalFormType id)
         {
-            try
-            {
-                await _pharmaceuticalFormService.DeleteAsync(id);
-                return Ok(new { message = "Success" });
-            }
-            catch (ApiException ex)
-            {
-                return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
-            }
-            
+            await _pharmaceuticalFormService.DeleteAsync(id);
+            return Ok(new { message = "Success" });
         }
 
     }

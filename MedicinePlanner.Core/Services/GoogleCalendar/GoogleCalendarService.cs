@@ -52,7 +52,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
                 }
                 catch (Exception ex)
                 {
-                    string message = ex.Message;
+                    
                 }
             }
             user = await UpdateUserCalendar(user, service);

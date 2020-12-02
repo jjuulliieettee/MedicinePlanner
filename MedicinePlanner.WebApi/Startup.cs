@@ -13,6 +13,7 @@ using Newtonsoft.Json.Serialization;
 using AutoMapper;
 using System;
 using System.Linq;
+using System.Net.Mime;
 using MedicinePlanner.WebApi.Auth.Services.Interfaces;
 using MedicinePlanner.WebApi.Auth.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,7 +21,9 @@ using Microsoft.IdentityModel.Tokens;
 using MedicinePlanner.WebApi.Auth.Configs;
 using System.Text;
 using MedicinePlanner.Core.Configs;
+using MedicinePlanner.Core.Exceptions;
 using MedicinePlanner.Core.Services.GoogleCalendar;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MedicinePlanner.WebApi
 {
@@ -60,17 +63,22 @@ namespace MedicinePlanner.WebApi
                 });
             });
 
-            services.AddControllers().AddNewtonsoftJson(s =>
-            {
-                s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            });
+            services.AddControllers(options => options.Filters.Add(new ApiExceptionFilter()))
+                    .ConfigureApiBehaviorOptions(options =>
+                    {
+                        options.SuppressModelStateInvalidFilter = true;
+                    })
+                    .AddNewtonsoftJson(s =>
+                    {
+                        s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    });
 
             services.Configure<GoogleOptions>(Configuration.GetSection("Google"));
 
             GoogleOptions googleOptions = Configuration.GetSection("Google").Get<GoogleOptions>();
 
-            
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme )
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.RequireHttpsMetadata = false;
@@ -90,8 +98,8 @@ namespace MedicinePlanner.WebApi
                 })
                 .AddGoogle(options =>
                 {
-                    options.ClientId = googleOptions.Web.clientId;
-                    options.ClientSecret = googleOptions.Web.clientSecret;
+                    options.ClientId = googleOptions.Web.ClientId;
+                    options.ClientSecret = googleOptions.Web.ClientSecret;
                     options.SaveTokens = true;
                 });
 

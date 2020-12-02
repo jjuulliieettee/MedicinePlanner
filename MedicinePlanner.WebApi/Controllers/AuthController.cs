@@ -44,39 +44,28 @@ namespace MedicinePlanner.WebApi.Controllers
         public async Task<ActionResult<LoginResponseDto>> Google([FromBody]GoogleAuthDto googleAuth)
         {
             Payload payload;
-            try
+            payload = await ValidateAsync(googleAuth.IdToken, new ValidationSettings
             {
-                payload = await ValidateAsync(googleAuth.IdToken, new ValidationSettings
-                {
-                    Audience = new[] { _options.Value.Web.clientId }
-                });
+                Audience = new[] { _options.Value.Web.ClientId }
+            });
 
-                UserReadDto userReadDto = _mapper.Map<UserReadDto>(await _userService.GetByEmailAsync(payload.Email));
-                if(userReadDto != null)
-                {
-                    return Ok(_authService.Login(userReadDto));
-                }
-                UserCreateDto userToCreate = new UserCreateDto 
-                { 
-                    Email = payload.Email, 
-                    Name = payload.GivenName, 
-                    Surname = payload.FamilyName,
-                    Photo = payload.Picture
-                };
-                
-                User newUser = await _userService.AddAsync(_mapper.Map<User>(userToCreate));
-                UserReadDto newUserDto = _mapper.Map<UserReadDto>(newUser);
+            UserReadDto userReadDto = _mapper.Map<UserReadDto>(await _userService.GetByEmailAsync(payload.Email));
+            if (userReadDto != null)
+            {
+                return Ok(_authService.Login(userReadDto));
+            }
+            UserCreateDto userToCreate = new UserCreateDto
+            {
+                Email = payload.Email,
+                Name = payload.GivenName,
+                Surname = payload.FamilyName,
+                Photo = payload.Picture
+            };
 
-                return Ok(_authService.Login(newUserDto));
-            }
-            catch(ApiException ex)
-            {
-                return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(401, new { error = true, message = "Invalid token!" });
-            }
+            User newUser = await _userService.AddAsync(_mapper.Map<User>(userToCreate));
+            UserReadDto newUserDto = _mapper.Map<UserReadDto>(newUser);
+
+            return Ok(_authService.Login(newUserDto));
         }
 
         [HttpGet("Me")]

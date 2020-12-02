@@ -39,7 +39,7 @@ namespace MedicinePlanner.WebApi.Controllers
 
             if (foodRelation == null)
             {
-                return NotFound();
+                throw new ApiException("Food relation not found!");
             }
 
             return Ok(foodRelation);
@@ -49,49 +49,24 @@ namespace MedicinePlanner.WebApi.Controllers
         public async Task<ActionResult<FoodRelationDto>> Put([FromRoute] FoodRelationType id, [FromBody]FoodRelationDto foodRelation)
         {
             foodRelation.Id = id;
-            try
-            {
-                return Ok(_mapper.Map<FoodRelationDto>(await _foodRelationService.EditAsync(_mapper.Map<FoodRelation>(foodRelation))));
-            }
-            catch (ApiException ex)
-            {
-                return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
-            }
+            await _foodRelationService.EditAsync(_mapper.Map<FoodRelation>(foodRelation));
+            return Ok(new { message = "Success" });
         }
 
         [HttpPost]
         public async Task<ActionResult<FoodRelationDto>> Post([FromBody]FoodRelationCreateDto foodRelation)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    FoodRelationDto newFoodRelation = _mapper.Map<FoodRelationDto>(
-                        await _foodRelationService.AddAsync(_mapper.Map<FoodRelation>(foodRelation))
-                        );
-                    return CreatedAtAction("Get", new { id = newFoodRelation.Id }, newFoodRelation);
-                }
-                catch (ApiException ex)
-                {
-                    return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
-                }
-            }
-            return BadRequest();
+            FoodRelationDto newFoodRelation = _mapper.Map<FoodRelationDto>(
+                await _foodRelationService.AddAsync(_mapper.Map<FoodRelation>(foodRelation))
+            );
+            return CreatedAtAction("Get", new { id = newFoodRelation.Id }, newFoodRelation);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete([FromRoute] FoodRelationType id)
         {
-            try
-            {
-                await _foodRelationService.DeleteAsync(id);
-                return Ok(new { message = "Success" });
-            }
-            catch (ApiException ex)
-            {
-                return StatusCode(ex.StatusCode, new { error = true, message = ex.Message });
-            }
-
+            await _foodRelationService.DeleteAsync(id);
+            return Ok(new { message = "Success" });
         }
 
     }

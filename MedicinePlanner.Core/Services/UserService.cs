@@ -3,8 +3,6 @@ using MedicinePlanner.Core.Repositories.Interfaces;
 using MedicinePlanner.Core.Services.Interfaces;
 using MedicinePlanner.Data.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MedicinePlanner.Core.Services
