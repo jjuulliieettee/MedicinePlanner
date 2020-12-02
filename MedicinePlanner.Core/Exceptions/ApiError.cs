@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using MedicinePlanner.Core.Resources;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace MedicinePlanner.Core.Exceptions
@@ -20,7 +21,7 @@ namespace MedicinePlanner.Core.Exceptions
             this.IsError = true;
             if (modelState != null && modelState.Any(m => m.Value.Errors.Count > 0))
             {
-                Message = "Please correct the errors in input data and try again.";
+                Message = MessagesResource.MODEL_VALIDATION_ERROR;
             }
         }
     }

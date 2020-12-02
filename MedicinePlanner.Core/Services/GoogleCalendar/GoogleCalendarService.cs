@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MedicinePlanner.Core.Resources;
 using MedicinePlanner.Data.Enums;
 
 namespace MedicinePlanner.Core.Services.GoogleCalendar
@@ -289,7 +290,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
                 {
                     TimeFrom = foodSchedule.TimeOfFirstMeal,
                     TimeTo = foodSchedule.TimeOfFirstMeal.AddMinutes(30),
-                    Description = "Meal time"
+                    Description = MessagesResource.MEAL_TIME
                 }
             };
 
@@ -304,7 +305,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
                 {
                     TimeFrom = timeToAdd,
                     TimeTo = timeToAdd.AddMinutes(30),
-                    Description = "Meal time"
+                    Description = MessagesResource.MEAL_TIME
                 });
             }
 
@@ -331,8 +332,8 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
 
         private string GetDescription(Medicine medicine)
         {
-            return $"Take {medicine.Name}, {medicine.PharmaceuticalForm.Name}, " +
-                   $"D: {medicine.Dosage}, {medicine.FoodRelation.Name}";
+            return string.Format(MessagesResource.TAKE_DESCRIPTION, medicine.Name, medicine.PharmaceuticalForm.Name,
+                medicine.Dosage, medicine.FoodRelation.Name);
         }
 
         private double GetInterval(DateTimeOffset lastHour, DateTimeOffset firstHour, int numberOfTakes)

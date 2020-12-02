@@ -1,5 +1,5 @@
-﻿using System;
-using Google.Apis.Auth;
+﻿using Google.Apis.Auth;
+using MedicinePlanner.Core.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -27,13 +27,13 @@ namespace MedicinePlanner.Core.Exceptions
                 }
                 else if (context.Exception is InvalidJwtException)
                 {
-                    apiError = new ApiError("Access denied. Please, log in again.");
+                    apiError = new ApiError(MessagesResource.ACCESS_DENIED);
                     context.HttpContext.Response.StatusCode = 401;
                 }
                 else
                 {
 #if !DEBUG
-                string exMessage = "Something went wrong. Please, try again";                
+                string exMessage = MessagesResource.UNHANDLED_ERROR;                
                 string stack = null;
 #else
                     string exMessage = context.Exception.GetBaseException().Message;

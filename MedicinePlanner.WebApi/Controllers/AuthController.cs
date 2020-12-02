@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using MedicinePlanner.Core.Configs;
-using MedicinePlanner.Core.Exceptions;
 using MedicinePlanner.Core.Services.Interfaces;
 using MedicinePlanner.Data.Models;
 using MedicinePlanner.WebApi.Auth.Dtos;
@@ -43,8 +42,7 @@ namespace MedicinePlanner.WebApi.Controllers
         [HttpPost("Google")]
         public async Task<ActionResult<LoginResponseDto>> Google([FromBody]GoogleAuthDto googleAuth)
         {
-            Payload payload;
-            payload = await ValidateAsync(googleAuth.IdToken, new ValidationSettings
+            var payload = await ValidateAsync(googleAuth.IdToken, new ValidationSettings
             {
                 Audience = new[] { _options.Value.Web.ClientId }
             });

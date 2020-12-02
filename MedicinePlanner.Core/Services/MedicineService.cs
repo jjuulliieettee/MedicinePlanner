@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MedicinePlanner.Core.Resources;
 
 namespace MedicinePlanner.Core.Services
 {
@@ -26,7 +27,7 @@ namespace MedicinePlanner.Core.Services
             
             if (medicines.Any())
             {
-                throw new ApiException("Medicine with such parameters already exists!", 400);
+                throw new ApiException(MessagesResource.MEDICINE_ALREADY_EXISTS, 400);
             }
             return await _medicineRepository.AddAsync(medicine);
         }
@@ -36,12 +37,12 @@ namespace MedicinePlanner.Core.Services
             Medicine medicineOld = await _medicineRepository.GetByIdToEditAsync(medicine.Id);
             if (medicineOld == null)
             {
-                throw new ApiException("Medicine not found!");
+                throw new ApiException(MessagesResource.MEDICINE_NOT_FOUND);
             }
 
             if ((await _medicineScheduleService.GetAllByMedicineIdAsync(medicine.Id)).Any())
             {
-                throw new ApiException("Medicine cannot be edited!", 400);
+                throw new ApiException(MessagesResource.MEDICINE_NOT_EDITABLE, 400);
             }
 
             IEnumerable<Medicine> existingMedicines = (await _medicineRepository.GetAllByNameAsync(medicine.Name))
@@ -49,7 +50,7 @@ namespace MedicinePlanner.Core.Services
 
             if (existingMedicines.Any())
             {
-                throw new ApiException("Medicine with such parameters already exists!", 400);
+                throw new ApiException(MessagesResource.MEDICINE_ALREADY_EXISTS, 400);
             }                    
             
             return await _medicineRepository.EditAsync(medicine, medicineOld);

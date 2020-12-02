@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MedicinePlanner.Data.Models;
@@ -7,6 +6,7 @@ using MedicinePlanner.Core.Services.Interfaces;
 using AutoMapper;
 using MedicinePlanner.WebApi.Dtos;
 using MedicinePlanner.Core.Exceptions;
+using MedicinePlanner.Core.Resources;
 using Microsoft.AspNetCore.Authorization;
 using MedicinePlanner.Data.Enums;
 
@@ -39,7 +39,7 @@ namespace MedicinePlanner.WebApi.Controllers
 
             if (pharmaceuticalForm == null)
             {
-                throw new ApiException("Pharmaceutical form not found!");
+                throw new ApiException(MessagesResource.PHARMACEUTICAL_FORM_NOT_FOUND);
             }
 
             return Ok(pharmaceuticalForm);
@@ -50,7 +50,7 @@ namespace MedicinePlanner.WebApi.Controllers
         {
             pharmaceuticalForm.Id = id;
             await _pharmaceuticalFormService.EditAsync(_mapper.Map<PharmaceuticalForm>(pharmaceuticalForm));
-            return Ok(new { message = "Success" });
+            return Ok(new { message = MessagesResource.SUCCESS_MESSAGE });
         }
 
         [HttpPost]
@@ -66,7 +66,7 @@ namespace MedicinePlanner.WebApi.Controllers
         public async Task<ActionResult> Delete([FromRoute] PharmaceuticalFormType id)
         {
             await _pharmaceuticalFormService.DeleteAsync(id);
-            return Ok(new { message = "Success" });
+            return Ok(new { message = MessagesResource.SUCCESS_MESSAGE });
         }
 
     }

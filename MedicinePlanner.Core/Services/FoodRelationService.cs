@@ -3,9 +3,9 @@ using MedicinePlanner.Core.Repositories.Interfaces;
 using MedicinePlanner.Core.Services.Interfaces;
 using MedicinePlanner.Data.Enums;
 using MedicinePlanner.Data.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MedicinePlanner.Core.Resources;
 
 namespace MedicinePlanner.Core.Services
 {
@@ -21,7 +21,7 @@ namespace MedicinePlanner.Core.Services
         {
             if (await _foodRelationRepo.GetByNameAsync(foodRelation.Name) != null)
             {
-                throw new ApiException("This food relation already exists!", 400);
+                throw new ApiException(MessagesResource.FOOD_RELATION_ALREADY_EXISTS, 400);
             }
             return await _foodRelationRepo.AddAsync(foodRelation);
         }
@@ -32,12 +32,12 @@ namespace MedicinePlanner.Core.Services
 
             if (foodRelation == null)
             {
-                throw new ApiException("Food relation not found!");
+                throw new ApiException(MessagesResource.FOOD_RELATION_NOT_FOUND);
             }
 
             if (foodRelation.Medicine != null)
             {
-                throw new ApiException("This food relation cannot be deleted!", 400);
+                throw new ApiException(MessagesResource.FOOD_RELATION_NOT_DELETABLE, 400);
             }
             await _foodRelationRepo.DeleteAsync(foodRelation);
         }
@@ -47,18 +47,18 @@ namespace MedicinePlanner.Core.Services
             FoodRelation foodRelationOld = await _foodRelationRepo.GetByIdAsync(foodRelation.Id);
             if (foodRelationOld == null)
             {
-                throw new ApiException("Food relation not found!");
+                throw new ApiException(MessagesResource.FOOD_RELATION_NOT_FOUND);
             }
 
             if (foodRelationOld.Medicine != null)
             {
-                throw new ApiException("This food relation cannot be modified!", 400);
+                throw new ApiException(MessagesResource.FOOD_RELATION_NOT_EDITABLE, 400);
             }
 
             FoodRelation foodRelationInDb = await _foodRelationRepo.GetByNameAsync(foodRelation.Name);
             if (foodRelationInDb != null && foodRelationInDb.Id != foodRelation.Id)
             {
-                throw new ApiException("This food relation already exists!", 400);
+                throw new ApiException(MessagesResource.FOOD_RELATION_ALREADY_EXISTS, 400);
             }
 
             return await _foodRelationRepo.EditAsync(foodRelation);

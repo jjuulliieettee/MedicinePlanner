@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MedicinePlanner.Core.Resources;
 
 namespace MedicinePlanner.Core.Services
 {
@@ -31,7 +32,8 @@ namespace MedicinePlanner.Core.Services
                 {
                     if (DoesMedicineScheduleOverlap(medSchedNew, medSchedOld))
                     {
-                        throw new ApiException($"Medicine schedules for {medSchedOld.Medicine.Name} overlap!", 400);
+                        throw new ApiException(
+                            string.Format(MessagesResource.MEDICINE_SCHEDULES_OVERLAP, medSchedOld.Medicine.Name), 400);
                     }
                 }
             }
@@ -44,7 +46,7 @@ namespace MedicinePlanner.Core.Services
 
             if (medicineSchedule == null)
             {
-                throw new ApiException("Medicine schedule not found!");
+                throw new ApiException(MessagesResource.MEDICINE_SCHEDULE_NOT_FOUND);
             }
 
             await _medicineScheduleRepo.DeleteAsync(medicineSchedule);
@@ -55,7 +57,7 @@ namespace MedicinePlanner.Core.Services
             MedicineSchedule medicineScheduleOld = await _medicineScheduleRepo.GetByIdAsync(medicineSchedule.Id);
             if (medicineScheduleOld == null)
             {
-                throw new ApiException("Medicine schedule not found!");
+                throw new ApiException(MessagesResource.MEDICINE_SCHEDULE_NOT_FOUND);
             }
 
             medicineSchedule.MedicineId = medicineScheduleOld.MedicineId;
@@ -66,7 +68,8 @@ namespace MedicinePlanner.Core.Services
 
             if (existingMedicineSchedules.Any(ms => DoesMedicineScheduleOverlap(medicineSchedule, ms)))
             {
-                throw new ApiException($"Medicine schedules for {medicineScheduleOld.Medicine.Name} overlap!", 400);
+                throw new ApiException(
+                    string.Format(MessagesResource.MEDICINE_SCHEDULES_OVERLAP, medicineScheduleOld.Medicine.Name), 400);
             }
 
             MedicineSchedule medicineScheduleNew = await _medicineScheduleRepo.EditAsync(medicineSchedule);

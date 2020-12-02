@@ -7,6 +7,7 @@ using MedicinePlanner.Core.Services.Interfaces;
 using MedicinePlanner.WebApi.Dtos;
 using AutoMapper;
 using MedicinePlanner.Core.Exceptions;
+using MedicinePlanner.Core.Resources;
 using Microsoft.AspNetCore.Authorization;
 
 namespace MedicinePlanner.WebApi.Controllers
@@ -32,28 +33,28 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<MedicineReadDto>> Get([FromRoute]Guid id)
+        public async Task<ActionResult<MedicineReadDto>> Get([FromRoute] Guid id)
         {
             MedicineReadDto medicine = _mapper.Map<MedicineReadDto>(await _medicineService.GetByIdAsync(id));
 
             if (medicine == null)
             {
-                throw new ApiException("Medicine not found!");
+                throw new ApiException(MessagesResource.MEDICINE_NOT_FOUND);
             }
 
             return Ok(medicine);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute]Guid id, [FromBody]MedicineEditDto medicineEditDto)
+        public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] MedicineEditDto medicineEditDto)
         {
             medicineEditDto.Id = id;
             await _medicineService.EditAsync(_mapper.Map<Medicine>(medicineEditDto));
-            return Ok(new { message = "Success" });
+            return Ok(new { message = MessagesResource.SUCCESS_MESSAGE });
         }
 
         [HttpPost]
-        public async Task<ActionResult<MedicineReadDto>> Post([FromBody]MedicineCreateDto medicine)
+        public async Task<ActionResult<MedicineReadDto>> Post([FromBody] MedicineCreateDto medicine)
         {
             MedicineReadDto newMedicine = _mapper.Map<MedicineReadDto>(await _medicineService.AddAsync(_mapper.Map<Medicine>(medicine)));
             return CreatedAtAction("Get", new { id = newMedicine.Id }, newMedicine);

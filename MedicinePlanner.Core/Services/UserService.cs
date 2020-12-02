@@ -4,6 +4,7 @@ using MedicinePlanner.Core.Services.Interfaces;
 using MedicinePlanner.Data.Models;
 using System;
 using System.Threading.Tasks;
+using MedicinePlanner.Core.Resources;
 
 namespace MedicinePlanner.Core.Services
 {
@@ -19,7 +20,7 @@ namespace MedicinePlanner.Core.Services
         {
             if (await _userRepo.GetByEmailAsync(user.Email) != null)
             {
-                throw new ApiException("This user already exists!", 400);
+                throw new ApiException(MessagesResource.USER_ALREADY_EXISTS, 400);
             }
             return await _userRepo.AddAsync(user);
         }

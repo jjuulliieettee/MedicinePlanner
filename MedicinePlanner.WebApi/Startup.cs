@@ -12,8 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using AutoMapper;
 using System;
+using System.Globalization;
 using System.Linq;
-using System.Net.Mime;
 using MedicinePlanner.WebApi.Auth.Services.Interfaces;
 using MedicinePlanner.WebApi.Auth.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,7 +23,8 @@ using System.Text;
 using MedicinePlanner.Core.Configs;
 using MedicinePlanner.Core.Exceptions;
 using MedicinePlanner.Core.Services.GoogleCalendar;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
 
 namespace MedicinePlanner.WebApi
 {
@@ -62,6 +63,8 @@ namespace MedicinePlanner.WebApi
                         .AllowCredentials();
                 });
             });
+
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
 
             services.AddControllers(options => options.Filters.Add(new ApiExceptionFilter()))
                     .ConfigureApiBehaviorOptions(options =>
@@ -131,6 +134,13 @@ namespace MedicinePlanner.WebApi
             }
 
             app.UseCors("CORS");
+
+            var supportedCultures = new[] { "en-US", "uk" };
+            var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
+                                                                      .AddSupportedCultures(supportedCultures)
+                                                                      .AddSupportedUICultures(supportedCultures);
+
+            app.UseRequestLocalization(localizationOptions);
 
             app.UseRouting();
 

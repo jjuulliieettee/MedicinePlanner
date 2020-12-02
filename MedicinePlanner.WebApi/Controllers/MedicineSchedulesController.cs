@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using MedicinePlanner.Core.Exceptions;
+using MedicinePlanner.Core.Resources;
 using MedicinePlanner.Core.Services.GoogleCalendar;
 using MedicinePlanner.Core.Services.Interfaces;
 using MedicinePlanner.Data.Models;
@@ -51,6 +51,7 @@ namespace MedicinePlanner.WebApi.Controllers
         {
             Guid userId = User.GetUserId();
             IEnumerable<MedicineScheduleAddDto> medicineScheduleAddDtos = foodAndMedicineSchedules.MedicineSchedules;
+
             IEnumerable<MedicineSchedule> medicineSchedules = await _medicineScheduleService.AddAsync(
                 _mapper.Map<IEnumerable<MedicineSchedule>>(medicineScheduleAddDtos), userId);
 
@@ -80,7 +81,7 @@ namespace MedicinePlanner.WebApi.Controllers
                 await _googleCalendarService.SetEvents(userId, accessToken);
             }
 
-            return Ok(new { message = "Success" });
+            return Ok(new { message = MessagesResource.SUCCESS_MESSAGE });
         }
 
         [HttpDelete("{id}")]
@@ -94,7 +95,7 @@ namespace MedicinePlanner.WebApi.Controllers
                 await _googleCalendarService.SetEvents(userId, accessToken);
             }
 
-            return Ok(new { message = "Success" });
+            return Ok(new { message = MessagesResource.SUCCESS_MESSAGE });
         }
 
         [HttpGet("GetFoodSchedules/{medicineScheduleId}")]
@@ -128,7 +129,7 @@ namespace MedicinePlanner.WebApi.Controllers
                 await _googleCalendarService.SetEvents(userId, accessToken);
             }
 
-            return Ok(new { message = "Success" });
+            return Ok(new { message = MessagesResource.SUCCESS_MESSAGE });
         }
 
         [HttpPut("FoodSchedules/{id}")]
@@ -146,7 +147,7 @@ namespace MedicinePlanner.WebApi.Controllers
                 await _googleCalendarService.SetEvents(userId, accessToken);
             }
 
-            return Ok(new { message = "Success" });
+            return Ok(new { message = MessagesResource.SUCCESS_MESSAGE });
         }
 
         [HttpDelete("FoodSchedules/{id}")]
@@ -161,7 +162,7 @@ namespace MedicinePlanner.WebApi.Controllers
                 await _googleCalendarService.SetEvents(userId, accessToken);
             }
 
-            return Ok(new { message = "Success" });
+            return Ok(new { message = MessagesResource.SUCCESS_MESSAGE });
         }
 
     }

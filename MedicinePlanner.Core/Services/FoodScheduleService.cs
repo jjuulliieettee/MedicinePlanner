@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MedicinePlanner.Core.Resources;
 using MedicinePlanner.Core.Services.GoogleCalendar;
 
 namespace MedicinePlanner.Core.Services
@@ -54,7 +55,7 @@ namespace MedicinePlanner.Core.Services
 
             if (foodSchedule == null)
             {
-                throw new ApiException("Food schedule not found!");
+                throw new ApiException(MessagesResource.FOOD_SCHEDULE_NOT_FOUND);
             }
 
             await _foodScheduleRepo.DeleteAsync(foodSchedule);
@@ -65,7 +66,7 @@ namespace MedicinePlanner.Core.Services
             FoodSchedule foodScheduleOld = await _foodScheduleRepo.GetByIdAsync(foodSchedule.Id);
             if (foodScheduleOld == null)
             {
-                throw new ApiException("Food schedule not found!");
+                throw new ApiException(MessagesResource.FOOD_SCHEDULE_NOT_FOUND);
             }
 
             foodSchedule.Date = foodScheduleOld.Date;
@@ -94,7 +95,7 @@ namespace MedicinePlanner.Core.Services
             FoodSchedule foodSchedule = await _foodScheduleRepo.GetByIdAsync(foodScheduleId);
             if (foodSchedule == null)
             {
-                throw new ApiException("Food schedule not found!");
+                throw new ApiException(MessagesResource.FOOD_SCHEDULE_NOT_FOUND);
             }
 
             IEnumerable<FoodSchedule> foodSchedules = (await _foodScheduleRepo.GetAllByMedicineScheduleIdAsync(foodSchedule.MedicineScheduleId))
@@ -102,7 +103,7 @@ namespace MedicinePlanner.Core.Services
 
             if (!foodSchedules.Any())
             {
-                throw new ApiException("Food schedules not found!");
+                throw new ApiException(MessagesResource.FOOD_SCHEDULE_NOT_FOUND);
             }
 
             List<DateTimeOffset> dates = new List<DateTimeOffset>();
@@ -122,7 +123,7 @@ namespace MedicinePlanner.Core.Services
             IEnumerable<FoodSchedule> foodSchedules = await _foodScheduleRepo.GetAllByMedicineScheduleIdAsync(medicineSchedule.Id);
             if (!foodSchedules.Any())
             {
-                throw new ApiException("Food schedules not found!");
+                throw new ApiException(MessagesResource.FOOD_SCHEDULE_NOT_FOUND);
             }
 
             FoodSchedule foodScheduleFirst = foodSchedules.FirstOrDefault();
