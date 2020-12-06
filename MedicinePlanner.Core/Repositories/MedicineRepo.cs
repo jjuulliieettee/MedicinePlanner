@@ -35,18 +35,19 @@ namespace MedicinePlanner.Core.Repositories
         {
             return await _context.Medicines
                                  .AsNoTracking()
-                                 .Include(fr => fr.FoodRelation)
-                                 .Include(pf => pf.PharmaceuticalForm)
-                                 .Include(ms => ms.MedicineSchedules)
+                                 .Include(med => med.FoodRelation)
+                                 .Include(med => med.PharmaceuticalForm)
+                                 .Include(med => med.MedicineSchedules)
                                  .FirstOrDefaultAsync(med => med.Id == id);
         }
 
         public async Task<IEnumerable<Medicine>> GetAllAsync()
         {
             return await _context.Medicines
-                                 .Include(fr => fr.FoodRelation)
-                                 .Include(pf => pf.PharmaceuticalForm)
-                                 .Include(ms => ms.MedicineSchedules)
+                                 .Include(med => med.FoodRelation)
+                                 .Include(med => med.PharmaceuticalForm)
+                                 .Include(med => med.MedicineSchedules)
+                                 .OrderBy(med => med.Name)
                                  .ToListAsync();
         }
 
@@ -54,19 +55,20 @@ namespace MedicinePlanner.Core.Repositories
         {
             return await _context.Medicines
                                  .AsNoTracking()
-                                 .Include(fr => fr.FoodRelation)
-                                 .Include(pf => pf.PharmaceuticalForm)
-                                 .Include(ms => ms.MedicineSchedules)
+                                 .Include(med => med.FoodRelation)
+                                 .Include(med => med.PharmaceuticalForm)
+                                 .Include(med => med.MedicineSchedules)
                                  .FirstOrDefaultAsync(med => med.Name == name);
         }
 
         public async Task<IEnumerable<Medicine>> GetAllByNameAsync(string name)
         {
             return await _context.Medicines
-                                 .Include(fr => fr.FoodRelation)
-                                 .Include(pf => pf.PharmaceuticalForm)
-                                 .Include(ms => ms.MedicineSchedules)
+                                 .Include(med => med.FoodRelation)
+                                 .Include(med => med.PharmaceuticalForm)
+                                 .Include(med => med.MedicineSchedules)
                                  .Where(med => name == null || med.Name.Contains(name))
+                                 .OrderBy(med => med.Name)
                                  .ToListAsync();
         }
 

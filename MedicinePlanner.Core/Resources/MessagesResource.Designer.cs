@@ -223,7 +223,7 @@ namespace MedicinePlanner.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;Take {0}, {1}, D: {2}, {3}&quot;.
+        ///   Looks up a localized string similar to Take {0}, {1}, D: {2}, {3}.
         /// </summary>
         public static string TAKE_DESCRIPTION {
             get {

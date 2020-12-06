@@ -172,7 +172,7 @@
     <value>Operation successful!</value>
   </data>
   <data name="TAKE_DESCRIPTION" xml:space="preserve">
-    <value>"Take {0}, {1}, D: {2}, {3}"</value>
+    <value>Take {0}, {1}, D: {2}, {3}</value>
   </data>
   <data name="UNHANDLED_ERROR" xml:space="preserve">
     <value>Something went wrong! Please, try again!</value>

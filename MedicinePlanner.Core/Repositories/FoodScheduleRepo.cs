@@ -54,8 +54,8 @@ namespace MedicinePlanner.Core.Repositories
         {
             return await _context.FoodSchedules
                                  .AsNoTracking()
-                                 .Where(ms => ms.MedicineSchedule.UserId == userId)
-                                 .Where(ms => ms.Date.Date == date.Date)
+                                 .Where(fs => fs.MedicineSchedule.UserId == userId)
+                                 .Where(fs => fs.Date.Date == date.Date)
                                  .ToListAsync();
         }
 
@@ -72,7 +72,7 @@ namespace MedicinePlanner.Core.Repositories
         {
             return await _context.FoodSchedules
                                  .AsNoTracking()
-                                 .Where(ms => ms.MedicineScheduleId == medicineScheduleId)
+                                 .Where(fs => fs.MedicineScheduleId == medicineScheduleId)
                                  .FirstOrDefaultAsync(fs => fs.Date.Date == date.Date);
         }
 
@@ -87,8 +87,8 @@ namespace MedicinePlanner.Core.Repositories
         {
             var datesOnly = dates.Select(x => x.Date);
             return await _context.FoodSchedules
-                                 .Where(ms => ms.MedicineSchedule.UserId == userId)
-                                 .Where(ms => datesOnly.Contains(ms.Date.Date))
+                                 .Where(fs => fs.MedicineSchedule.UserId == userId)
+                                 .Where(fs => datesOnly.Contains(fs.Date.Date))
                                  .ToListAsync();
         }
 
