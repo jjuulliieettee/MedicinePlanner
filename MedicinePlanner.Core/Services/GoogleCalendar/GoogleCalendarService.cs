@@ -17,7 +17,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
 {
     public class GoogleCalendarService : IGoogleCalendarService
     {
-        private DateTimeOffset TimeOfLastMeal;
+        private DateTime TimeOfLastMeal;
 
         private readonly IUserService _userService;
         private readonly IMedicineScheduleService _medicineScheduleService;
@@ -92,11 +92,11 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
                                 Summary = take.Description,
                                 Start = new EventDateTime()
                                 {
-                                    DateTime = take.TimeFrom.DateTime
+                                    DateTime = take.TimeFrom
                                 },
                                 End = new EventDateTime()
                                 {
-                                    DateTime = take.TimeTo.DateTime
+                                    DateTime = take.TimeTo
                                 },
                                 Reminders = new Event.RemindersData()
                                 {
@@ -199,7 +199,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
                     Description = GetDescription(medicine)
                 });
 
-                DateTimeOffset timeToAdd = medicineTakes.First().TimeFrom;
+                DateTime timeToAdd = medicineTakes.First().TimeFrom;
                 for (int i = 1; i < medicine.NumberOfTakes; i++)
                 {
                     timeToAdd = timeToAdd.AddMinutes(intervalBetweenTakes);
@@ -218,7 +218,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
                 Take firstMeal = mealsTakes.Find(meal => meal.TimeFrom.Hour == foodSchedule.TimeOfFirstMeal.Hour);
                 firstMeal.Description += "; " + GetDescription(medicine);
 
-                DateTimeOffset timeToAdd = firstMeal.TimeFrom;
+                DateTime timeToAdd = firstMeal.TimeFrom;
                 for (int i = 1; i < medicine.NumberOfTakes; i++)
                 {
                     timeToAdd = timeToAdd.AddMinutes(intervalBetweenTakes);
@@ -238,7 +238,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
                     Description = GetDescription(medicine)
                 });
 
-                DateTimeOffset timeToAdd = medicineTakes.First().TimeFrom;
+                DateTime timeToAdd = medicineTakes.First().TimeFrom;
                 for (int i = 1; i < Math.Min(medicine.NumberOfTakes, foodSchedule.NumberOfMeals); i++)
                 {
                     timeToAdd = timeToAdd.AddMinutes(intervalBetweenTakes);
@@ -262,7 +262,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
                     Description = GetDescription(medicine)
                 });
 
-                DateTimeOffset timeToAdd = medicineTakes.First().TimeFrom;
+                DateTime timeToAdd = medicineTakes.First().TimeFrom;
                 for (int i = 1; i < Math.Min(medicine.NumberOfTakes, foodSchedule.NumberOfMeals); i++)
                 {
                     timeToAdd = timeToAdd.AddMinutes(intervalBetweenTakes);
@@ -297,7 +297,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
             double intervalBetweenFood = GetInterval(TimeOfLastMeal, foodSchedule.TimeOfFirstMeal, foodSchedule.NumberOfMeals);
 
 
-            DateTimeOffset timeToAdd = foodSchedule.TimeOfFirstMeal;
+            DateTime timeToAdd = foodSchedule.TimeOfFirstMeal;
             for (int i = 1; i < foodSchedule.NumberOfMeals; i++)
             {
                 timeToAdd = timeToAdd.AddMinutes(intervalBetweenFood);
@@ -312,7 +312,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
             return mealsForDay;
         }
 
-        private Take GetNearestMeal(List<Take> meals, DateTimeOffset medicineTakeTime)
+        private Take GetNearestMeal(List<Take> meals, DateTime medicineTakeTime)
         {
             Take nearestMeal = meals.First();
 
@@ -336,7 +336,7 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
                 medicine.Dosage, medicine.FoodRelation.Name);
         }
 
-        private double GetInterval(DateTimeOffset lastHour, DateTimeOffset firstHour, int numberOfTakes)
+        private double GetInterval(DateTime lastHour, DateTime firstHour, int numberOfTakes)
         {
             return Math.Round((double)(lastHour.Hour - firstHour.Hour) / (numberOfTakes - 1), 1) * 60;
         }
@@ -351,24 +351,26 @@ namespace MedicinePlanner.Core.Services.GoogleCalendar
 
         private async Task<User> UpdateUserCalendar(User user, CalendarService service)
         {
-            Calendar primaryCalendar = await service.Calendars.Get("primary").ExecuteAsync();
+            //Calendar primaryCalendar = await service.Calendars.Get("primary").ExecuteAsync();
             Calendar calendarNew = new Calendar
             {
                 Summary = "MedicinePlanner",
-                TimeZone = primaryCalendar.TimeZone
+                //TimeZone = primaryCalendar.TimeZone
             };
             Calendar createdCalendar = await service.Calendars.Insert(calendarNew).ExecuteAsync();
             user.Calendar = createdCalendar.Id;
             return await _userService.UpdateAsync(user);
         }
 
-        private DateTimeOffset SetTimeOfLastMeal(FoodSchedule foodSchedule)
+        private DateTime SetTimeOfLastMeal(FoodSchedule foodSchedule)
         {
             return foodSchedule.TimeOfFirstMeal.AddHours(12).Hour <= 21
                 ? foodSchedule.TimeOfFirstMeal.AddHours(12)
-                : new DateTimeOffset(foodSchedule.TimeOfFirstMeal.Year, foodSchedule.TimeOfFirstMeal.Month,
+                : new DateTime(
+                    foodSchedule.TimeOfFirstMeal.Year, 
+                    foodSchedule.TimeOfFirstMeal.Month,
                     foodSchedule.TimeOfFirstMeal.Day,
-                    20, 0, 0, new TimeSpan(0, 0, 0));
+                    20, 0, 0);
         }
     }
 }

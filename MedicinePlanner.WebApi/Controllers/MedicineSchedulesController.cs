@@ -106,7 +106,7 @@ namespace MedicinePlanner.WebApi.Controllers
         }
 
         [HttpGet("{medicineScheduleId}/SearchFoodSchedule")]
-        public async Task<ActionResult<FoodScheduleReadDto>> SearchFoodSchedule([FromQuery] DateTimeOffset date, 
+        public async Task<ActionResult<FoodScheduleReadDto>> SearchFoodSchedule([FromQuery] DateTime date, 
             [FromRoute] Guid medicineScheduleId)
         {
             return Ok(_mapper.Map<FoodScheduleReadDto>(await _foodScheduleService.GetByDateAsync(date, medicineScheduleId)));

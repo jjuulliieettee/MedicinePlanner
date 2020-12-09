@@ -50,7 +50,7 @@ namespace MedicinePlanner.Core.Repositories
             return foodSchedules;
         }
 
-        public async Task<IEnumerable<FoodSchedule>> GetAllByDateAndUserIdAsync(DateTimeOffset date, Guid userId)
+        public async Task<IEnumerable<FoodSchedule>> GetAllByDateAndUserIdAsync(DateTime date, Guid userId)
         {
             return await _context.FoodSchedules
                                  .AsNoTracking()
@@ -68,7 +68,7 @@ namespace MedicinePlanner.Core.Repositories
                                  .ToListAsync();
         }
 
-        public async Task<FoodSchedule> GetByDateAsync(DateTimeOffset date, Guid medicineScheduleId)
+        public async Task<FoodSchedule> GetByDateAsync(DateTime date, Guid medicineScheduleId)
         {
             return await _context.FoodSchedules
                                  .AsNoTracking()
@@ -83,7 +83,7 @@ namespace MedicinePlanner.Core.Repositories
                                  .FirstOrDefaultAsync(fs => fs.Id == id);
         }
 
-        public async Task<IEnumerable<FoodSchedule>> GetAllByDateRangeAndUserIdAsync(DateTimeOffset[] dates, Guid userId)
+        public async Task<IEnumerable<FoodSchedule>> GetAllByDateRangeAndUserIdAsync(DateTime[] dates, Guid userId)
         {
             var datesOnly = dates.Select(x => x.Date);
             return await _context.FoodSchedules

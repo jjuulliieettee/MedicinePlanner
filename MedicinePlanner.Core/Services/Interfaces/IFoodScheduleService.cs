@@ -8,7 +8,7 @@ namespace MedicinePlanner.Core.Services.Interfaces
     public interface IFoodScheduleService
     {
         Task<FoodSchedule> GetByIdAsync(Guid id);
-        Task<FoodSchedule> GetByDateAsync(DateTimeOffset date, Guid medicineScheduleId);
+        Task<FoodSchedule> GetByDateAsync(DateTime date, Guid medicineScheduleId);
         Task<IEnumerable<FoodSchedule>> GetAllByMedicineScheduleIdAsync(Guid medicineScheduleId);
         Task<IEnumerable<FoodSchedule>> GetAllByMedicineScheduleIdRangeAsync(MedicineSchedule[] medicineSchedules);
         Task AddAsync(FoodSchedule foodSchedule, IEnumerable<MedicineSchedule> medicineSchedules);

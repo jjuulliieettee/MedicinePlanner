@@ -15,9 +15,9 @@ namespace MedicinePlanner.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
+                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "5.0.1");
 
             modelBuilder.Entity("MedicinePlanner.Data.Models.FoodRelation", b =>
                 {
@@ -39,8 +39,8 @@ namespace MedicinePlanner.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("MedicineScheduleId")
                         .HasColumnType("uniqueidentifier");
@@ -48,8 +48,8 @@ namespace MedicinePlanner.Data.Migrations
                     b.Property<int>("NumberOfMeals")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("TimeOfFirstMeal")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("TimeOfFirstMeal")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -102,14 +102,14 @@ namespace MedicinePlanner.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("EndDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("MedicineId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("StartDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -174,6 +174,8 @@ namespace MedicinePlanner.Data.Migrations
                         .HasForeignKey("MedicineScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("MedicineSchedule");
                 });
 
             modelBuilder.Entity("MedicinePlanner.Data.Models.Medicine", b =>
@@ -189,6 +191,10 @@ namespace MedicinePlanner.Data.Migrations
                         .HasForeignKey("PharmaceuticalFormId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("FoodRelation");
+
+                    b.Navigation("PharmaceuticalForm");
                 });
 
             modelBuilder.Entity("MedicinePlanner.Data.Models.MedicineSchedule", b =>
@@ -204,6 +210,35 @@ namespace MedicinePlanner.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Medicine");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MedicinePlanner.Data.Models.FoodRelation", b =>
+                {
+                    b.Navigation("Medicine");
+                });
+
+            modelBuilder.Entity("MedicinePlanner.Data.Models.Medicine", b =>
+                {
+                    b.Navigation("MedicineSchedules");
+                });
+
+            modelBuilder.Entity("MedicinePlanner.Data.Models.MedicineSchedule", b =>
+                {
+                    b.Navigation("FoodSchedules");
+                });
+
+            modelBuilder.Entity("MedicinePlanner.Data.Models.PharmaceuticalForm", b =>
+                {
+                    b.Navigation("Medicine");
+                });
+
+            modelBuilder.Entity("MedicinePlanner.Data.Models.User", b =>
+                {
+                    b.Navigation("MedicineSchedules");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,9 +12,9 @@ namespace MedicinePlanner.WebApi.Dtos
         public Guid UserId { get; set; }
 
         [Required]
-        public DateTimeOffset StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [Required]
-        public DateTimeOffset EndDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 }

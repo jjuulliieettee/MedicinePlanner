@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MedicinePlanner.Data.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,8 +11,8 @@ namespace MedicinePlanner.Data.Migrations
                 name: "FoodRelations",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -23,8 +23,8 @@ namespace MedicinePlanner.Data.Migrations
                 name: "PharmaceuticalForms",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -35,11 +35,12 @@ namespace MedicinePlanner.Data.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Email = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Surname = table.Column<string>(nullable: true),
-                    Photo = table.Column<string>(nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Calendar = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,14 +51,14 @@ namespace MedicinePlanner.Data.Migrations
                 name: "Medicines",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    ActiveSubstance = table.Column<string>(nullable: false),
-                    Dosage = table.Column<int>(nullable: false),
-                    NumberOfTakes = table.Column<int>(nullable: false),
-                    FoodInterval = table.Column<int>(nullable: true),
-                    PharmaceuticalFormId = table.Column<int>(nullable: false),
-                    FoodRelationId = table.Column<int>(nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ActiveSubstance = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Dosage = table.Column<int>(type: "int", nullable: false),
+                    NumberOfTakes = table.Column<int>(type: "int", nullable: false),
+                    FoodInterval = table.Column<int>(type: "int", nullable: true),
+                    PharmaceuticalFormId = table.Column<int>(type: "int", nullable: false),
+                    FoodRelationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -80,11 +81,11 @@ namespace MedicinePlanner.Data.Migrations
                 name: "MedicineSchedules",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    StartDate = table.Column<DateTimeOffset>(nullable: false),
-                    EndDate = table.Column<DateTimeOffset>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
-                    MedicineId = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MedicineId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -107,11 +108,11 @@ namespace MedicinePlanner.Data.Migrations
                 name: "FoodSchedules",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Date = table.Column<DateTimeOffset>(nullable: false),
-                    TimeOfFirstMeal = table.Column<DateTimeOffset>(nullable: false),
-                    NumberOfMeals = table.Column<int>(nullable: false),
-                    MedicineScheduleId = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeOfFirstMeal = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NumberOfMeals = table.Column<int>(type: "int", nullable: false),
+                    MedicineScheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {

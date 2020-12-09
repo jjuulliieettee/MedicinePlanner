@@ -8,10 +8,10 @@ namespace MedicinePlanner.Data.Models
         public Guid Id { get; set; }        
 
         [Required]
-        public DateTimeOffset Date { get; set; }
+        public DateTime Date { get; set; }
 
         [Required]
-        public DateTimeOffset TimeOfFirstMeal { get; set; }
+        public DateTime TimeOfFirstMeal { get; set; }
 
         [Required]
         public int NumberOfMeals { get; set; }

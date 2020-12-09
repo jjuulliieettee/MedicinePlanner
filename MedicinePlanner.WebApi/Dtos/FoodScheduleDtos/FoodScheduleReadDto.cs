@@ -8,9 +8,9 @@ namespace MedicinePlanner.WebApi.Dtos
 
         public Guid MedicineScheduleId { get; set; }
 
-        public DateTimeOffset Date { get; set; }
+        public DateTime Date { get; set; }
 
-        public DateTimeOffset TimeOfFirstMeal { get; set; }
+        public DateTime TimeOfFirstMeal { get; set; }
 
         public int NumberOfMeals { get; set; }
 

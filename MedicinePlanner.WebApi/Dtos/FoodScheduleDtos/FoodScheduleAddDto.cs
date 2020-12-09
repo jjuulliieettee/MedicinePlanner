@@ -10,7 +10,7 @@ namespace MedicinePlanner.WebApi.Dtos
         public int NumberOfMeals { get; set; }
 
         [Required]
-        public DateTimeOffset TimeOfFirstMeal { get; set; }
+        public DateTime TimeOfFirstMeal { get; set; }
 
         [Required]
         public IEnumerable<MedicineScheduleAddDto> MedicineSchedules { get; set; }

@@ -9,10 +9,10 @@ namespace MedicinePlanner.Data.Models
         public Guid Id { get; set; }
 
         [Required]
-        public DateTimeOffset StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [Required]
-        public DateTimeOffset EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         public Guid UserId { get; set; }
 

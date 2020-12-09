@@ -5,21 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20201008085330_InitMigration.cs" />
-    <Compile Remove="Migrations\20201008085330_InitMigration.Designer.cs" />
-    <Compile Remove="Migrations\20201105151755_UpdatedDateTypeInMedicineSchedule.cs" />
-    <Compile Remove="Migrations\20201105151755_UpdatedDateTypeInMedicineSchedule.Designer.cs" />
-    <Compile Remove="Migrations\20201111161212_UpdatedUserModel.cs" />
-    <Compile Remove="Migrations\20201111161212_UpdatedUserModel.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.8">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
