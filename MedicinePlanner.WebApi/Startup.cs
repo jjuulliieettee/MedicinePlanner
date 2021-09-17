@@ -21,6 +21,7 @@ using MedicinePlanner.WebApi.Auth.Configs;
 using System.Text;
 using MedicinePlanner.Core.Configs;
 using MedicinePlanner.Core.Exceptions;
+using MedicinePlanner.Core.Extensions;
 using MedicinePlanner.Core.Services.GoogleCalendar;
 using Microsoft.OpenApi.Models;
 
@@ -139,6 +140,8 @@ namespace MedicinePlanner.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseAutoMigrateDatabase<ApplicationContext>();
 
             app.UseCors("CORS");
 

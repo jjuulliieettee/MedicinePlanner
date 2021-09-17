@@ -15,7 +15,6 @@ namespace MedicinePlanner.Data
 
         public ApplicationContext(DbContextOptions<ApplicationContext> opt) : base(opt)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
